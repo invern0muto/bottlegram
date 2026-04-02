@@ -1472,7 +1472,7 @@
 
           if (m.visibilita === 'privato') {
             /* Controlla se il lettore è il destinatario del messaggio */
-            const eMioDest = nomeLettore && m.destinatario === nomeLettore;
+            const eMioDest = nomeLettore && m.destinatario.toLowerCase() === nomeLettore.toLowerCase();
 
             if (eMioDest) {
               /* ── Messaggio privato per questo lettore: mostra il "clicca per leggere" ── */
