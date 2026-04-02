@@ -640,13 +640,14 @@
                 <th>Mittente</th>
                 <th>Messaggio</th>
                 <th>Luogo</th>
+                <th>Mappa</th>
                 <th>Data</th>
                 <th>Tipo</th>
                 <th>Azioni</th>
               </tr>
             </thead>
             <tbody id="tbody-msg">
-              <tr><td colspan="6" class="loading">Caricamento messaggi...</td></tr>
+              <tr><td colspan="7" class="loading">Caricamento messaggi...</td></tr>
             </tbody>
           </table>
         </div>
@@ -796,7 +797,7 @@
 
       if (!lista.length) {
         document.getElementById('tbody-msg').innerHTML =
-          '<tr><td colspan="6"><div class="empty-state">Nessun messaggio trovato</div></td></tr>';
+          '<tr><td colspan="7"><div class="empty-state">Nessun messaggio trovato</div></td></tr>';
         return;
       }
 
@@ -807,6 +808,14 @@
           </td>
           <td><div class="msg-preview">${esc(m.testo || '')}</div></td>
           <td class="td-muted">${esc(m.citta || '—')}</td>
+          <td>
+            ${m.mapUrl
+              ? `<a href="https://maps.google.com/?q=${m.lat},${m.lon}" target="_blank">
+                   <img src="${m.mapUrl}" alt="mappa"
+                     style="width:90px;height:56px;object-fit:cover;border-radius:4px;border:1px solid #e0e0e0;display:block;" />
+                 </a>`
+              : '<span class="td-muted">—</span>'}
+          </td>
           <td class="td-muted" style="white-space:nowrap">${fmtData(m.data)}</td>
           <td><span class="badge ${m.visibilita === 'privato' ? 'badge-priv' : 'badge-pub'}">
             ${m.visibilita === 'privato' ? 'PRIVATO' : 'PUBBLICO'}</span></td>
