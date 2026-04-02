@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" id="html-root">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -914,67 +914,67 @@
 </svg>
     </div>
     <h2>BOTTLEGRAM</h2>
-    <p>Lascia o scopri messaggi legati a questo luogo.</p>
-    <button class="btn-primary" id="btn-leggi">LEGGI I MESSAGGI</button>
-    <button class="btn-primary secondary" id="btn-lascia">LASCIA UN MESSAGGIO</button>
-    <button class="btn-link" id="btn-chisiamo">COS'È BOTTLEGRAM?</button>
+    <p data-i18n="home_subtitle">Lascia o scopri messaggi legati a questo luogo.</p>
+    <button class="btn-primary" id="btn-leggi" data-i18n="btn_leggi">LEGGI I MESSAGGI</button>
+    <button class="btn-primary secondary" id="btn-lascia" data-i18n="btn_lascia">LASCIA UN MESSAGGIO</button>
+    <button class="btn-link" id="btn-chisiamo" data-i18n="btn_chisiamo">COS'È BOTTLEGRAM?</button>
   </div>
 
   <!-- ─── Pagina Messaggi ──────────────────────────────────── -->
   <div id="page-messaggi">
-    <button class="back-btn" id="btn-back-msg">← TORNA ALLA HOME</button>
-    <h2>MESSAGGI</h2>
+    <button class="back-btn" id="btn-back-msg" data-i18n="page_msg_back">← TORNA ALLA HOME</button>
+    <h2 data-i18n="page_msg_title">MESSAGGI</h2>
     <!-- Viene aggiornato con la città rilevata -->
-    <p class="subtitle" id="msg-location-label">Caricamento posizione...</p>
+    <p class="subtitle" id="msg-location-label" data-i18n="msg_loading_pos">Caricamento posizione...</p>
     <div class="messages-list" id="messages-list">
-      <div class="loading">Caricamento...</div>
+      <div class="loading" data-i18n="loading">Caricamento...</div>
     </div>
   </div>
 
   <!-- ─── Pagina "Cos'è Bottlegram?" ─────────────────────── -->
   <div id="page-chisiamo">
-    <button class="back-btn" id="btn-back-chi">← TORNA ALLA HOME</button>
-    <h2>COS'È BOTTLEGRAM?</h2>
+    <button class="back-btn" id="btn-back-chi" data-i18n="page_chi_back">← TORNA ALLA HOME</button>
+    <h2 data-i18n="page_chi_title">COS'È BOTTLEGRAM?</h2>
     <hr class="divider" />
-    <p>Bottlegram ti permette di lasciare messaggi virtuali legati a un luogo fisico, come messaggi in bottiglia digitali.</p>
-    <p>Puoi lasciare messaggi pubblici visibili a tutti nella tua zona, o messaggi privati visibili solo al destinatario.</p>
-    <p>I messaggi sono filtrati per distanza — vedi solo quelli vicini a te.</p>
-    <p>Il progetto è stato creato da <strong>Invernomuto</strong>, è totalmente gratuito e senza scopo di lucro.</p>
+    <p data-i18n="page_chi_p1">Bottlegram ti permette di lasciare messaggi virtuali legati a un luogo fisico, come messaggi in bottiglia digitali.</p>
+    <p data-i18n="page_chi_p2">Puoi lasciare messaggi pubblici visibili a tutti nella tua zona, o messaggi privati visibili solo al destinatario.</p>
+    <p data-i18n="page_chi_p3">I messaggi sono filtrati per distanza — vedi solo quelli vicini a te.</p>
+    <p data-i18n="page_chi_p4">Il progetto è stato creato da <strong>Invernomuto</strong>, è totalmente gratuito e senza scopo di lucro.</p>
 
-    <button class="btn-primary" id="btn-qrcode" style="margin: 16px 0;">STAMPA IL TUO QR CODE</button>
+    <button class="btn-primary" id="btn-qrcode" style="margin: 16px 0;" data-i18n="btn_qrcode">STAMPA IL TUO QR CODE</button>
 
     <!-- ─── Form inline: suggerimenti e richieste QR ─── -->
     <div id="form-suggerimento">
-      <h3>Hai un suggerimento o vuoi un QR code?</h3>
-      <p class="form-desc">Segnalaci un luogo interessante dove posizionare un QR code, oppure lasciaci un suggerimento per migliorare Bottlegram.</p>
+      <h3 data-i18n="sug_title">Hai un suggerimento o vuoi un QR code?</h3>
+      <p class="form-desc" data-i18n="sug_desc">Segnalaci un luogo interessante dove posizionare un QR code, oppure lasciaci un suggerimento per migliorare Bottlegram.</p>
 
-      <span class="input-label">Nome (opzionale)</span>
-      <input type="text" id="sug-nome" placeholder="Il tuo nome" />
+      <span class="input-label" data-i18n="sug_label_nome">Nome (opzionale)</span>
+      <input type="text" id="sug-nome" placeholder="Il tuo nome" data-i18n-ph="sug_ph_nome" />
 
-      <span class="input-label">Email di contatto</span>
-      <input type="email" id="sug-email" placeholder="tua@email.com" />
+      <span class="input-label" data-i18n="sug_label_email">Email di contatto</span>
+      <input type="email" id="sug-email" placeholder="tua@email.com" data-i18n-ph="sug_ph_email" />
 
-      <span class="input-label">Tipo di richiesta</span>
+      <span class="input-label" data-i18n="sug_label_tipo">Tipo di richiesta</span>
       <select id="sug-tipo">
         <option value="suggerimento">💡 Suggerimento</option>
         <option value="qrcode">📍 Richiesta QR code ETERNO</option>
       </select>
 
-      <span class="input-label">Messaggio</span>
-      <textarea id="sug-testo" placeholder="Descrivi il tuo suggerimento o il luogo dove vorresti il QR code..."></textarea>
+      <span class="input-label" data-i18n="sug_label_msg">Messaggio</span>
+      <textarea id="sug-testo" placeholder="Descrivi il tuo suggerimento o il luogo dove vorresti il QR code..." data-i18n-ph="sug_ph_msg"></textarea>
 
-      <button class="btn-primary" id="btn-invia-sug" style="margin-top: 16px;">INVIA</button>
+      <button class="btn-primary" id="btn-invia-sug" style="margin-top: 16px;" data-i18n="btn_invia_sug">INVIA</button>
 
       <!-- Messaggio di conferma post-invio -->
-      <div id="sug-success">✅ Grazie! Il tuo messaggio è stato inviato con successo.</div>
+      <div id="sug-success" data-i18n="sug_success">✅ Grazie! Il tuo messaggio è stato inviato con successo.</div>
     </div>
   </div>
 
   <!-- ─── Pagina QR Code ─────────────────────────────────── -->
   <div id="page-qrcode">
-    <button class="back-btn" id="btn-back-qr">← TORNA ALLA HOME</button>
-    <h2>STAMPA IL TUO QR CODE</h2>
-    <p class="subtitle">Scarica il volantino, stampalo e attaccalo dove vuoi — chiunque lo scansiona entra in Bottlegram.</p>
+    <button class="back-btn" id="btn-back-qr" data-i18n="page_qr_back">← TORNA ALLA HOME</button>
+    <h2 data-i18n="page_qr_title">STAMPA IL TUO QR CODE</h2>
+    <p class="subtitle" data-i18n="page_qr_subtitle">Scarica il volantino, stampalo e attaccalo dove vuoi — chiunque lo scansiona entra in Bottlegram.</p>
 
     <!-- Anteprima del volantino da stampare -->
     <div id="qr-preview-wrap">
@@ -987,38 +987,38 @@
       <!-- URL rimosso dal preview visivo -->
     </div>
 
-    <button class="btn-primary" id="btn-download-qr">⬇️ SCARICA PNG</button>
-    <p class="qr-note" style="margin-top: 16px;">Il file scaricato è ad alta risoluzione (1200×1600px), pronto per la stampa su foglio A5 o A4.</p>
+    <button class="btn-primary" id="btn-download-qr" data-i18n="btn_download_qr">⬇️ SCARICA PNG</button>
+    <p class="qr-note" style="margin-top: 16px;" data-i18n="qr_note">Il file scaricato è ad alta risoluzione (1200×1600px), pronto per la stampa su foglio A5 o A4.</p>
   </div>
 
   <!-- ─── Modale: Lascia un messaggio ─────────────────────── -->
   <div class="overlay" id="overlay-messaggio">
     <div class="modal">
       <button class="close-btn" id="close-messaggio">×</button>
-      <h3>Lascia un messaggio</h3>
+      <h3 data-i18n="modal_msg_title">Lascia un messaggio</h3>
 
-      <span class="input-label">Il tuo nome (opzionale)</span>
-      <input type="text" id="input-nome" placeholder="Nome e Cognome" />
+      <span class="input-label" data-i18n="modal_msg_label_nome">Il tuo nome (opzionale)</span>
+      <input type="text" id="input-nome" placeholder="Nome e Cognome" data-i18n-ph="modal_msg_ph_nome" />
 
-      <span class="input-label">Messaggio</span>
-      <textarea id="input-messaggio" placeholder="Lascia un messaggio nella bottiglia..."></textarea>
+      <span class="input-label" data-i18n="modal_msg_label_msg">Messaggio</span>
+      <textarea id="input-messaggio" placeholder="Lascia un messaggio nella bottiglia..." data-i18n-ph="modal_msg_ph_msg"></textarea>
 
-      <span class="input-label">Visibilità</span>
+      <span class="input-label" data-i18n="modal_msg_label_vis">Visibilità</span>
       <div class="visibility-toggle">
-        <button id="btn-pubblico" class="active">🌍 Pubblico</button>
-        <button id="btn-privato">🔒 Privato</button>
+        <button id="btn-pubblico" class="active" data-i18n="btn_pubblico">🌍 Pubblico</button>
+        <button id="btn-privato" data-i18n="btn_privato">🔒 Privato</button>
       </div>
 
       <!-- Campo visibile solo se si sceglie "Privato" -->
       <div class="field-destinatario" id="field-destinatario">
-        <span class="input-label">Destinatario</span>
-        <input type="text" id="input-destinatario" placeholder="Nome e Cognome" />
+        <span class="input-label" data-i18n="modal_msg_label_dest">Destinatario</span>
+        <input type="text" id="input-destinatario" placeholder="Nome e Cognome" data-i18n-ph="modal_msg_ph_dest" />
       </div>
 
       <!-- Stato in tempo reale della geolocalizzazione -->
-      <div class="geo-status" id="geo-status">📍 Rilevamento posizione...</div>
+      <div class="geo-status" id="geo-status" data-i18n="geo_rilevamento">📍 Rilevamento posizione...</div>
 
-      <button class="btn-primary" id="btn-invia">INVIA MESSAGGIO</button>
+      <button class="btn-primary" id="btn-invia" data-i18n="btn_invia">INVIA MESSAGGIO</button>
     </div>
   </div>
 
@@ -1026,15 +1026,16 @@
   <div class="overlay" id="overlay-conferma">
     <div class="modal">
       <button class="close-btn" id="close-conferma">×</button>
-      <h3>✅ Messaggio inviato!</h3>
-      <p style="font-size:0.88rem; color:var(--text-muted); margin: 12px 0 24px;">
+      <h3 data-i18n="modal_conf_title">✅ Messaggio inviato!</h3>
+      <p data-i18n="modal_conf_text" style="font-size:0.88rem; color:var(--text-muted); margin: 12px 0 24px;">
         Il tuo messaggio è stato lasciato in questo luogo.
         Vuoi condividerlo con i tuoi contatti?
       </p>
-      <button class="btn-primary" onclick="condividiDopoInvio()">
-        &#8679; CONDIVIDI QUESTO LUOGO
+      <button class="btn-primary" onclick="condividiDopoInvio()" data-i18n="btn_condividi">
+        ↧ CONDIVIDI QUESTO LUOGO
       </button>
       <button class="btn-link" id="btn-skip-condividi"
+        data-i18n="btn_skip"
         style="margin-top:14px; display:block; width:100%; text-align:center;">
         No grazie
       </button>
@@ -1045,14 +1046,14 @@
   <div class="overlay" id="overlay-lettore">
     <div class="modal">
       <button class="close-btn" id="close-lettore">×</button>
-      <h3>Chi sei?</h3>
-      <p class="nome-lettore-info">
+      <h3 data-i18n="modal_chi_title">Chi sei?</h3>
+      <p class="nome-lettore-info" data-i18n="modal_chi_info">
         Inserisci il tuo nome per vedere eventuali messaggi privati.
         Lascia vuoto per vedere solo i messaggi pubblici.
       </p>
-      <span class="input-label">Il tuo nome (opzionale)</span>
-      <input type="text" id="input-nome-lettore" placeholder="Nome e Cognome" />
-      <button class="btn-primary" id="btn-conferma-lettore" style="margin-top: 20px;">LEGGI I MESSAGGI</button>
+      <span class="input-label" data-i18n="modal_chi_label_nome">Il tuo nome (opzionale)</span>
+      <input type="text" id="input-nome-lettore" placeholder="Nome e Cognome" data-i18n-ph="modal_chi_ph_nome" />
+      <button class="btn-primary" id="btn-conferma-lettore" style="margin-top: 20px;" data-i18n="btn_conferma_lettore">LEGGI I MESSAGGI</button>
     </div>
   </div>
 
@@ -1060,12 +1061,12 @@
   <div class="overlay" id="overlay-privato">
     <div class="modal">
       <button class="close-btn" id="close-privato">×</button>
-      <h3>Messaggio privato per te</h3>
+      <h3 data-i18n="modal_priv_title">Messaggio privato per te</h3>
 
-      <span class="input-label">Da</span>
+      <span class="input-label" data-i18n="modal_priv_label_da">Da</span>
       <p id="privato-mittente" style="font-weight: 700; margin-top: 4px; color: #111; margin-bottom: 12px;"></p>
 
-      <span class="input-label">Messaggio</span>
+      <span class="input-label" data-i18n="modal_priv_label_msg">Messaggio</span>
       <p id="privato-testo" style="margin-top: 8px; line-height: 1.7; color: #333;"></p>
 
       <p id="privato-data"     style="margin-top: 12px; font-size: 0.72rem; color: #bbb;"></p>
@@ -1078,9 +1079,277 @@
 
   <!-- Footer -->
   <footer style="text-align:center; padding:24px 16px; font-size:0.75rem; color:var(--text-light); border-top:1px solid var(--border); margin-top:40px;">
-    © Bottlegram &mdash; progetto di Invernomuto, gestito da VORTEXBRAIN &nbsp;·&nbsp;
-    <a href="/privacy.html" style="color:var(--text-light); text-decoration:underline;">Privacy Policy</a>
+    <span data-i18n="footer">© Bottlegram &mdash; progetto di Invernomuto, gestito da VORTEXBRAIN &nbsp;·&nbsp;</span>
+    <a href="/privacy.html" style="color:var(--text-light); text-decoration:underline;" data-i18n="footer_privacy">Privacy Policy</a>
   </footer>
+
+  <!-- ─── Sistema i18n (fuori dal modulo ES) ──────────────── -->
+  <script>
+    /* ── Dizionario IT/EN ─────────────────────────────────────── */
+    const i18n = {
+      it: {
+        /* --- Home --- */
+        home_subtitle:            'Lascia o scopri messaggi legati a questo luogo.',
+        btn_leggi:                'LEGGI I MESSAGGI',
+        btn_lascia:               'LASCIA UN MESSAGGIO',
+        btn_chisiamo:             "COS'È BOTTLEGRAM?",
+
+        /* --- Header --- */
+        /* (BOTTLEGRAM è nome proprio — non tradurre) */
+
+        /* --- Pagina messaggi --- */
+        page_msg_back:            '← TORNA ALLA HOME',
+        page_msg_title:           'MESSAGGI',
+        msg_loading_pos:          'Caricamento posizione...',
+        loading:                  'Caricamento...',
+
+        /* --- Pagina Chi siamo --- */
+        page_chi_back:            '← TORNA ALLA HOME',
+        page_chi_title:           "COS'È BOTTLEGRAM?",
+        page_chi_p1:              'Bottlegram ti permette di lasciare messaggi virtuali legati a un luogo fisico, come messaggi in bottiglia digitali.',
+        page_chi_p2:              'Puoi lasciare messaggi pubblici visibili a tutti nella tua zona, o messaggi privati visibili solo al destinatario.',
+        page_chi_p3:              'I messaggi sono filtrati per distanza — vedi solo quelli vicini a te.',
+        page_chi_p4:              'Il progetto è stato creato da <strong>Invernomuto</strong>, è totalmente gratuito e senza scopo di lucro.',
+        btn_qrcode:               'STAMPA IL TUO QR CODE',
+        sug_title:                'Hai un suggerimento o vuoi un QR code?',
+        sug_desc:                 'Segnalaci un luogo interessante dove posizionare un QR code, oppure lasciaci un suggerimento per migliorare Bottlegram.',
+        sug_label_nome:           'Nome (opzionale)',
+        sug_ph_nome:              'Il tuo nome',
+        sug_label_email:          'Email di contatto',
+        sug_ph_email:             'tua@email.com',
+        sug_label_tipo:           'Tipo di richiesta',
+        sug_opt_suggerimento:     '💡 Suggerimento',
+        sug_opt_qrcode:           '📍 Richiesta QR code ETERNO',
+        sug_label_msg:            'Messaggio',
+        sug_ph_msg:               'Descrivi il tuo suggerimento o il luogo dove vorresti il QR code...',
+        btn_invia_sug:            'INVIA',
+        sug_success:              '✅ Grazie! Il tuo messaggio è stato inviato con successo.',
+
+        /* --- Pagina QR --- */
+        page_qr_back:             '← TORNA ALLA HOME',
+        page_qr_title:            'STAMPA IL TUO QR CODE',
+        page_qr_subtitle:         'Scarica il volantino, stampalo e attaccalo dove vuoi — chiunque lo scansiona entra in Bottlegram.',
+        btn_download_qr:          '⬇️ SCARICA PNG',
+        qr_note:                  'Il file scaricato è ad alta risoluzione (1200×1600px), pronto per la stampa su foglio A5 o A4.',
+
+        /* --- Modale: Lascia un messaggio --- */
+        modal_msg_title:          'Lascia un messaggio',
+        modal_msg_label_nome:     'Il tuo nome (opzionale)',
+        modal_msg_ph_nome:        'Nome e Cognome',
+        modal_msg_label_msg:      'Messaggio',
+        modal_msg_ph_msg:         'Lascia un messaggio nella bottiglia...',
+        modal_msg_label_vis:      'Visibilità',
+        btn_pubblico:             '🌍 Pubblico',
+        btn_privato:              '🔒 Privato',
+        modal_msg_label_dest:     'Destinatario',
+        modal_msg_ph_dest:        'Nome e Cognome',
+        geo_rilevamento:          '📍 Rilevamento posizione...',
+        btn_invia:                'INVIA MESSAGGIO',
+
+        /* --- Modale: Conferma invio --- */
+        modal_conf_title:         '✅ Messaggio inviato!',
+        modal_conf_text:          'Il tuo messaggio è stato lasciato in questo luogo. Vuoi condividerlo con i tuoi contatti?',
+        btn_condividi:            '↧ CONDIVIDI QUESTO LUOGO',
+        btn_skip:                 'No grazie',
+
+        /* --- Modale: Chi sei? (lettore) --- */
+        modal_chi_title:          'Chi sei?',
+        modal_chi_info:           'Inserisci il tuo nome per vedere eventuali messaggi privati. Lascia vuoto per vedere solo i messaggi pubblici.',
+        modal_chi_label_nome:     'Il tuo nome (opzionale)',
+        modal_chi_ph_nome:        'Nome e Cognome',
+        btn_conferma_lettore:     'LEGGI I MESSAGGI',
+
+        /* --- Modale: Messaggio privato --- */
+        modal_priv_title:         'Messaggio privato per te',
+        modal_priv_label_da:      'Da',
+        modal_priv_label_msg:     'Messaggio',
+
+        /* --- Footer --- */
+        footer:                   '© Bottlegram &mdash; progetto di Invernomuto, gestito da VORTEXBRAIN &nbsp;·&nbsp;',
+        footer_privacy:           'Privacy Policy',
+
+        /* --- Badge messaggi --- */
+        badge_pubblico:           'PUBBLICO',
+        badge_privato:            'PRIVATO',
+        badge_privato_per_te:     'PRIVATO — PER TE',
+
+        /* --- Testi dinamici JS --- */
+        da_te:                    'da te',
+        clicca_leggi:             '🔓 Clicca per leggere',
+        msg_privato_locked:       '🔒 Questo messaggio è privato',
+        leggi_di_piu:             'LEGGI DI PIÙ',
+        leggi_meno:               'LEGGI MENO',
+        toast_scrivi:             '⚠️ Scrivi un messaggio prima di inviare!',
+        toast_destinatario:       '⚠️ Inserisci il nome del destinatario!',
+        toast_posizione:          '⚠️ Posizione non ancora rilevata, aspetta...',
+        toast_errore_invio:       '❌ Errore invio. Riprova.',
+        toast_qr_nonpronto:       '⚠️ QR non ancora pronto, riprova.',
+        toast_download_ok:        '✅ Download avviato!',
+        toast_email_invalida:     "⚠️ Inserisci un'email valida.",
+        geo_non_supportata:       '⚠️ Geo non supportata',
+        geo_posizione_rilevata:   '📍 Posizione rilevata',
+        geo_non_disponibile:      '⚠️ Posizione non disponibile',
+        pos_non_disponibile:      'Posizione non disponibile',
+        pos_dal_link:             '📍 Posizione dal link',
+        caricamento:              'Caricamento...',
+        nessun_msg_ancora:        'Nessun messaggio ancora.<br>Sii il primo!',
+        nessun_msg_zona:          'Nessun messaggio in questa zona.<br>Sii il primo a lasciarne uno!',
+        errore_caricamento:       'Errore nel caricamento.',
+        gps_non_rilevato:         '⏳ Posizione GPS non ancora rilevata.<br>Riprova tra un momento.',
+        zona_sconosciuta:         'Zona sconosciuta',
+        posizione_sconosciuta:    'Sconosciuta',
+        invio_in_corso:           'INVIO...',
+        share_text:               'Ho lasciato un messaggio in questo luogo:',
+        link_copiato:             '✅ Link copiato negli appunti:\n',
+        copia_link:               'Copia questo link:',
+      },
+      en: {
+        /* --- Home --- */
+        home_subtitle:            'Leave or discover messages tied to this place.',
+        btn_leggi:                'READ MESSAGES',
+        btn_lascia:               'LEAVE A MESSAGE',
+        btn_chisiamo:             'WHAT IS BOTTLEGRAM?',
+
+        /* --- Pagina messaggi --- */
+        page_msg_back:            '← BACK TO HOME',
+        page_msg_title:           'MESSAGES',
+        msg_loading_pos:          'Loading location...',
+        loading:                  'Loading...',
+
+        /* --- Pagina Chi siamo --- */
+        page_chi_back:            '← BACK TO HOME',
+        page_chi_title:           'WHAT IS BOTTLEGRAM?',
+        page_chi_p1:              'Bottlegram lets you leave virtual messages tied to a physical location, like digital messages in a bottle.',
+        page_chi_p2:              'You can leave public messages visible to everyone in your area, or private messages visible only to the recipient.',
+        page_chi_p3:              'Messages are filtered by distance — you only see those near you.',
+        page_chi_p4:              'Il progetto è stato creato da <strong>Invernomuto</strong>, è totalmente gratuito e senza scopo di lucro.',
+        btn_qrcode:               'PRINT YOUR QR CODE',
+        sug_title:                'Have a suggestion or want a QR code?',
+        sug_desc:                 'Let us know an interesting place to put a QR code, or leave us a suggestion to improve Bottlegram.',
+        sug_label_nome:           'Name (optional)',
+        sug_ph_nome:              'Your name',
+        sug_label_email:          'Contact email',
+        sug_ph_email:             'your@email.com',
+        sug_label_tipo:           'Request type',
+        sug_opt_suggerimento:     '💡 Suggestion',
+        sug_opt_qrcode:           '📍 ETERNAL QR code request',
+        sug_label_msg:            'Message',
+        sug_ph_msg:               'Describe your suggestion or the place where you would like the QR code...',
+        btn_invia_sug:            'SEND',
+        sug_success:              '✅ Thank you! Your message has been sent successfully.',
+
+        /* --- Pagina QR --- */
+        page_qr_back:             '← BACK TO HOME',
+        page_qr_title:            'PRINT YOUR QR CODE',
+        page_qr_subtitle:         'Download the flyer, print it and put it wherever you want — anyone who scans it enters Bottlegram.',
+        btn_download_qr:          '⬇️ DOWNLOAD PNG',
+        qr_note:                  'The downloaded file is high resolution (1200×1600px), ready to print on A5 or A4.',
+
+        /* --- Modale: Lascia un messaggio --- */
+        modal_msg_title:          'Leave a message',
+        modal_msg_label_nome:     'Your name (optional)',
+        modal_msg_ph_nome:        'First and Last Name',
+        modal_msg_label_msg:      'Message',
+        modal_msg_ph_msg:         'Leave a message in the bottle...',
+        modal_msg_label_vis:      'Visibility',
+        btn_pubblico:             '🌍 Public',
+        btn_privato:              '🔒 Private',
+        modal_msg_label_dest:     'Recipient',
+        modal_msg_ph_dest:        'First and Last Name',
+        geo_rilevamento:          '📍 Detecting location...',
+        btn_invia:                'SEND MESSAGE',
+
+        /* --- Modale: Conferma invio --- */
+        modal_conf_title:         '✅ Message sent!',
+        modal_conf_text:          'Your message has been left in this place. Do you want to share it with your contacts?',
+        btn_condividi:            '↧ SHARE THIS PLACE',
+        btn_skip:                 'No thanks',
+
+        /* --- Modale: Chi sei? (lettore) --- */
+        modal_chi_title:          'Who are you?',
+        modal_chi_info:           'Enter your name to see any private messages addressed to you. Leave blank to see only public messages.',
+        modal_chi_label_nome:     'Your name (optional)',
+        modal_chi_ph_nome:        'First and Last Name',
+        btn_conferma_lettore:     'READ MESSAGES',
+
+        /* --- Modale: Messaggio privato --- */
+        modal_priv_title:         'Private message for you',
+        modal_priv_label_da:      'From',
+        modal_priv_label_msg:     'Message',
+
+        /* --- Footer --- */
+        footer:                   '© Bottlegram &mdash; a project by Invernomuto, managed by VORTEXBRAIN &nbsp;·&nbsp;',
+        footer_privacy:           'Privacy Policy',
+
+        /* --- Badge messaggi --- */
+        badge_pubblico:           'PUBLIC',
+        badge_privato:            'PRIVATE',
+        badge_privato_per_te:     'PRIVATE — FOR YOU',
+
+        /* --- Testi dinamici JS --- */
+        da_te:                    'from you',
+        clicca_leggi:             '🔓 Click to read',
+        msg_privato_locked:       '🔒 This message is private',
+        leggi_di_piu:             'READ MORE',
+        leggi_meno:               'READ LESS',
+        toast_scrivi:             '⚠️ Write a message before sending!',
+        toast_destinatario:       '⚠️ Enter the recipient\'s name!',
+        toast_posizione:          '⚠️ Location not yet detected, please wait...',
+        toast_errore_invio:       '❌ Send error. Please try again.',
+        toast_qr_nonpronto:       '⚠️ QR not ready yet, please try again.',
+        toast_download_ok:        '✅ Download started!',
+        toast_email_invalida:     '⚠️ Please enter a valid email.',
+        geo_non_supportata:       '⚠️ Geolocation not supported',
+        geo_posizione_rilevata:   '📍 Location detected',
+        geo_non_disponibile:      '⚠️ Location unavailable',
+        pos_non_disponibile:      'Location unavailable',
+        pos_dal_link:             '📍 Location from link',
+        caricamento:              'Loading...',
+        nessun_msg_ancora:        'No messages yet.<br>Be the first!',
+        nessun_msg_zona:          'No messages in this area.<br>Be the first to leave one!',
+        errore_caricamento:       'Loading error.',
+        gps_non_rilevato:         '⏳ GPS location not yet detected.<br>Try again in a moment.',
+        zona_sconosciuta:         'Unknown area',
+        posizione_sconosciuta:    'Unknown',
+        invio_in_corso:           'SENDING...',
+        share_text:               'I left a message in this place:',
+        link_copiato:             '✅ Link copied to clipboard:\n',
+        copia_link:               'Copy this link:',
+      }
+    };
+
+    /* ── Rilevamento lingua browser ───────────────────────────── */
+    const userLang = navigator.language.startsWith('it') ? 'it' : 'en';
+
+    /* ── Applica le traduzioni a tutti gli elementi data-i18n ──── */
+    function applicaLingua() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[userLang][key] !== undefined) {
+          el.innerHTML = i18n[userLang][key];
+        }
+      });
+      /* Placeholder degli input */
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (i18n[userLang][key] !== undefined) {
+          el.setAttribute('placeholder', i18n[userLang][key]);
+        }
+      });
+      /* Opzioni select */
+      const selTipo = document.getElementById('sug-tipo');
+      if (selTipo) {
+        selTipo.options[0].text = i18n[userLang].sug_opt_suggerimento;
+        selTipo.options[1].text = i18n[userLang].sug_opt_qrcode;
+      }
+    }
+
+    /* Esegui subito al caricamento */
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('html-root').lang = userLang;
+      applicaLingua();
+    });
+  </script>
 
   <!-- Funzioni globali richiamate da onclick inline (devono stare fuori dal modulo ES) -->
   <script>
@@ -1112,7 +1381,7 @@
 
       const url   = `https://bottlegram.web.app?lat=${lat}&lon=${lon}`;
       const title = 'Bottlegram';
-      const text  = `Ho lasciato un messaggio in questo luogo: ${citta}`;
+      const text  = `${i18n[userLang].share_text} ${citta}`;
 
       document.getElementById('overlay-conferma').classList.remove('active');
 
@@ -1121,9 +1390,9 @@
       } else {
         try {
           await navigator.clipboard.writeText(url);
-          alert('✅ Link copiato negli appunti:\n' + url);
+          alert(i18n[userLang].link_copiato + url);
         } catch(e) {
-          prompt('Copia questo link:', url);
+          prompt(i18n[userLang].copia_link, url);
         }
       }
     }
@@ -1132,10 +1401,10 @@
       const el = btn.previousElementSibling;
       if (el.classList.contains('troncato')) {
         el.classList.remove('troncato');
-        btn.textContent = 'LEGGI MENO';
+        btn.textContent = i18n[userLang].leggi_meno;
       } else {
         el.classList.add('troncato');
-        btn.textContent = 'LEGGI DI PIÙ';
+        btn.textContent = i18n[userLang].leggi_di_piu;
       }
     }
   </script>
@@ -1295,7 +1564,7 @@
       // Attendi che il QR sia stato renderizzato
       const qrImg = document.querySelector('#qrcode-canvas canvas') ||
                     document.querySelector('#qrcode-canvas img');
-      if (!qrImg) { showToast('⚠️ QR non ancora pronto, riprova.'); return; }
+      if (!qrImg) { showToast(i18n[userLang].toast_qr_nonpronto); return; }
 
       const W = 1200, H = 1600;
       const canvas = document.createElement('canvas');
@@ -1359,7 +1628,7 @@
       link.download = 'bottlegram-qrcode.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-      showToast('✅ Download avviato!');
+      showToast(i18n[userLang].toast_download_ok);
     }
 
     /* ─────────────────────────────────────────────────────
@@ -1406,7 +1675,7 @@
     function getGeo() {
       return new Promise((resolve, reject) => {
         if (!navigator.geolocation) {
-          document.getElementById('geo-status').textContent = '⚠️ Geo non supportata';
+          document.getElementById('geo-status').textContent = i18n[userLang].geo_non_supportata;
           reject();
           return;
         }
@@ -1425,7 +1694,7 @@
 
               const quartiere = data.address.suburb || data.address.neighbourhood || data.address.quarter || '';
               const citta     = data.address.city   || data.address.town         || data.address.village || '';
-              userCity = quartiere ? `${quartiere}, ${citta}` : citta || 'Zona sconosciuta';
+              userCity = quartiere ? `${quartiere}, ${citta}` : citta || i18n[userLang].zona_sconosciuta;
 
               // Aggiorna le etichette di posizione nell'interfaccia
               document.getElementById('geo-status').textContent          = `📍 ${userCity}`;
@@ -1433,17 +1702,17 @@
               document.getElementById('header-raggio').textContent       = `📍 ${userCity}`;
             } catch {
               // Fallback se il reverse geocoding fallisce
-              userCity = 'Posizione rilevata';
-              document.getElementById('geo-status').textContent         = '📍 Posizione rilevata';
-              document.getElementById('msg-location-label').textContent = '📍 Posizione rilevata';
+              userCity = i18n[userLang].geo_posizione_rilevata.replace('📍 ', '');
+              document.getElementById('geo-status').textContent         = i18n[userLang].geo_posizione_rilevata;
+              document.getElementById('msg-location-label').textContent = i18n[userLang].geo_posizione_rilevata;
             }
 
             resolve();
           },
           () => {
             // L'utente ha negato i permessi o la geolocalizzazione è fallita
-            document.getElementById('geo-status').textContent         = '⚠️ Posizione non disponibile';
-            document.getElementById('msg-location-label').textContent = 'Posizione non disponibile';
+            document.getElementById('geo-status').textContent         = i18n[userLang].geo_non_disponibile;
+            document.getElementById('msg-location-label').textContent = i18n[userLang].pos_non_disponibile;
             reject();
           },
           { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
@@ -1487,9 +1756,9 @@
       const destinatario = document.getElementById('input-destinatario').value.trim();
 
       // Validazioni
-      if (!testo)                                       { showToast('⚠️ Scrivi un messaggio prima di inviare!');     return; }
-      if (visibilita === 'privato' && !destinatario)    { showToast('⚠️ Inserisci il nome del destinatario!');       return; }
-      if (!userLat)                                     { showToast('⚠️ Posizione non ancora rilevata, aspetta...'); return; }
+      if (!testo)                                       { showToast(i18n[userLang].toast_scrivi);        return; }
+      if (visibilita === 'privato' && !destinatario)    { showToast(i18n[userLang].toast_destinatario);  return; }
+      if (!userLat)                                     { showToast(i18n[userLang].toast_posizione);     return; }
 
       try {
         await addDoc(collection(db, 'messaggi'), {
@@ -1497,7 +1766,7 @@
           testo,
           lat:          userLat,
           lon:          userLon,
-          citta:        userCity || 'Sconosciuta',
+          citta:        userCity || i18n[userLang].posizione_sconosciuta,
           visibilita,
           // Il destinatario viene salvato in minuscolo per confronti case-insensitive
           destinatario: visibilita === 'privato' ? destinatario.toLowerCase() : '',
@@ -1515,7 +1784,7 @@
         closeModal('overlay-messaggio');
         mostraConfermaInvio(userLat, userLon, userCity);
       } catch (e) {
-        showToast('❌ Errore invio. Riprova.');
+        showToast(i18n[userLang].toast_errore_invio);
         console.error(e);
       }
     }
@@ -1526,8 +1795,8 @@
     ───────────────────────────────────────────────────── */
     const haURLParams = leggiURLParams();
     if (haURLParams) {
-      document.getElementById('header-raggio').textContent      = '📍 Posizione dal link';
-      document.getElementById('msg-location-label').textContent = '📍 Posizione dal link';
+      document.getElementById('header-raggio').textContent      = i18n[userLang].pos_dal_link;
+      document.getElementById('msg-location-label').textContent = i18n[userLang].pos_dal_link;
     }
 
     /* ─────────────────────────────────────────────────────
@@ -1539,10 +1808,10 @@
     ───────────────────────────────────────────────────── */
     async function loadMessages() {
       const container = document.getElementById('messages-list');
-      container.innerHTML = '<div class="loading">Caricamento...</div>';
+      container.innerHTML = `<div class="loading">${i18n[userLang].caricamento}</div>`;
 
       if (!userLat) {
-        container.innerHTML = '<div class="no-messages">⏳ Posizione GPS non ancora rilevata.<br>Riprova tra un momento.</div>';
+        container.innerHTML = `<div class="no-messages">${i18n[userLang].gps_non_rilevato}</div>`;
         return;
       }
 
@@ -1551,7 +1820,7 @@
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
-          container.innerHTML = '<div class="no-messages">Nessun messaggio ancora.<br>Sii il primo!</div>';
+          container.innerHTML = `<div class="no-messages">${i18n[userLang].nessun_msg_ancora}</div>`;
           return;
         }
 
@@ -1570,7 +1839,7 @@
 
           count++;
 
-          const data      = m.data ? new Date(m.data.seconds * 1000).toLocaleString('it-IT') : '—';
+          const data      = m.data ? new Date(m.data.seconds * 1000).toLocaleString(userLang === 'it' ? 'it-IT' : 'en-GB') : '—';
           const distLabel = formatDistanza(dist);
 
           if (m.visibilita === 'pubblico') {
@@ -1581,11 +1850,11 @@
                   <span class="msg-author">👤 ${m.nome}</span>
                   <span class="msg-date">${data}</span>
                 </div>
-                <span class="msg-badge pub">PUBBLICO</span>
-                <div class="msg-distance">📍 ${distLabel} da te</div>
+                <span class="msg-badge pub">${i18n[userLang].badge_pubblico}</span>
+                <div class="msg-distance">📍 ${distLabel} ${i18n[userLang].da_te}</div>
                 <div class="msg-location">${m.citta}</div>
                 <div class="msg-text troncato">${m.testo}</div>
-                <button class="btn-espandi" onclick="toggleTesto(this)" style="display:none">LEGGI DI PIÙ</button>
+                <button class="btn-espandi" onclick="toggleTesto(this)" style="display:none">${i18n[userLang].leggi_di_piu}</button>
                 ${m.mapUrl ? `<img class="msg-map"
                   src="${m.mapUrl}"
                   alt="Posizione messaggio"
@@ -1606,10 +1875,10 @@
                     <span class="msg-author privato">👤 ${m.nome}</span>
                     <span class="msg-date">${data}</span>
                   </div>
-                  <span class="msg-badge priv">PRIVATO — PER TE</span>
-                  <div class="msg-distance">📍 ${distLabel} da te</div>
+                  <span class="msg-badge priv">${i18n[userLang].badge_privato_per_te}</span>
+                  <div class="msg-distance">📍 ${distLabel} ${i18n[userLang].da_te}</div>
                   <div class="msg-location">${m.citta}</div>
-                  <div class="msg-locked">🔓 Clicca per leggere</div>
+                  <div class="msg-locked">${i18n[userLang].clicca_leggi}</div>
                 </div>`;
 
               // Aggancia il click dopo che il DOM si è aggiornato
@@ -1621,7 +1890,7 @@
                     document.getElementById('privato-mittente').textContent = m.nome;
                     document.getElementById('privato-testo').textContent    = m.testo;
                     document.getElementById('privato-data').textContent     = data;
-                    document.getElementById('privato-distanza').textContent = `📍 ${distLabel} da te`;
+                    document.getElementById('privato-distanza').textContent = `📍 ${distLabel} ${i18n[userLang].da_te}`;
                     document.getElementById('overlay-privato').classList.add('active');
                   });
                 }
@@ -1634,10 +1903,10 @@
                     <span class="msg-author privato">— —</span>
                     <span class="msg-date">${data}</span>
                   </div>
-                  <span class="msg-badge priv">PRIVATO</span>
-                  <div class="msg-distance">📍 ${distLabel} da te</div>
+                  <span class="msg-badge priv">${i18n[userLang].badge_privato}</span>
+                  <div class="msg-distance">📍 ${distLabel} ${i18n[userLang].da_te}</div>
                   <div class="msg-location">${m.citta}</div>
-                  <div class="msg-locked">🔒 Questo messaggio è privato</div>
+                  <div class="msg-locked">${i18n[userLang].msg_privato_locked}</div>
                 </div>`;
             }
           }
@@ -1657,10 +1926,10 @@
 
         // Nessun messaggio nel raggio
         if (count === 0) {
-          container.innerHTML = `<div class="no-messages">Nessun messaggio in questa zona.<br>Sii il primo a lasciarne uno!</div>`;
+          container.innerHTML = `<div class="no-messages">${i18n[userLang].nessun_msg_zona}</div>`;
         }
       } catch (e) {
-        container.innerHTML = '<div class="no-messages">Errore nel caricamento.</div>';
+        container.innerHTML = `<div class="no-messages">${i18n[userLang].errore_caricamento}</div>`;
         console.error(e);
       }
     }
@@ -1676,15 +1945,15 @@
       const testo = document.getElementById('sug-testo').value.trim();
 
       // Validazioni
-      if (!testo) { showToast('⚠️ Scrivi un messaggio prima di inviare!'); return; }
+      if (!testo) { showToast(i18n[userLang].toast_scrivi); return; }
       if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showToast('⚠️ Inserisci un\'email valida.');
+        showToast(i18n[userLang].toast_email_invalida);
         return;
       }
 
       const btn = document.getElementById('btn-invia-sug');
       btn.disabled = true;
-      btn.textContent = 'INVIO...';
+      btn.textContent = i18n[userLang].invio_in_corso;
 
       try {
         await addDoc(collection(db, 'suggerimenti'), {
@@ -1708,11 +1977,11 @@
         }, 5000);
 
       } catch (e) {
-        showToast('❌ Errore invio. Riprova.');
+        showToast(i18n[userLang].toast_errore_invio);
         console.error(e);
       } finally {
         btn.disabled = false;
-        btn.textContent = 'INVIA';
+        btn.textContent = i18n[userLang].btn_invia_sug;
       }
     }
 
@@ -1729,7 +1998,7 @@
     // Home → apre modale di composizione e avvia il GPS
     document.getElementById('btn-lascia').addEventListener('click', async () => {
       document.getElementById('overlay-messaggio').classList.add('active');
-      document.getElementById('geo-status').textContent = '📍 Rilevamento posizione...';
+      document.getElementById('geo-status').textContent = i18n[userLang].geo_rilevamento;
       await getGeo();
     });
 
