@@ -923,10 +923,7 @@
   <!-- ─── Pagina Messaggi ──────────────────────────────────── -->
   <div id="page-messaggi">
     <button class="back-btn" id="btn-back-msg">← TORNA ALLA HOME</button>
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
-      <h2>MESSAGGI</h2>
-      <button class="btn-share" id="btn-share" onclick="condividiPosizione()">&#8679; CONDIVIDI LUOGO</button>
-    </div>
+    <h2>MESSAGGI</h2>
     <!-- Viene aggiornato con la città rilevata -->
     <p class="subtitle" id="msg-location-label">Caricamento posizione...</p>
     <div class="messages-list" id="messages-list">
@@ -1025,6 +1022,25 @@
     </div>
   </div>
 
+  <!-- ─── Modale: Conferma invio + condivisione ─────────── -->
+  <div class="overlay" id="overlay-conferma">
+    <div class="modal">
+      <button class="close-btn" id="close-conferma">×</button>
+      <h3>✅ Messaggio inviato!</h3>
+      <p style="font-size:0.88rem; color:var(--text-muted); margin: 12px 0 24px;">
+        Il tuo messaggio è stato lasciato in questo luogo.
+        Vuoi condividerlo con i tuoi contatti?
+      </p>
+      <button class="btn-primary" onclick="condividiDopoInvio()">
+        &#8679; CONDIVIDI QUESTO LUOGO
+      </button>
+      <button class="btn-link" id="btn-skip-condividi"
+        style="margin-top:14px; display:block; width:100%; text-align:center;">
+        No grazie
+      </button>
+    </div>
+  </div>
+
   <!-- ─── Modale: Chi sei? (lettore) ──────────────────────── -->
   <div class="overlay" id="overlay-lettore">
     <div class="modal">
@@ -1073,29 +1089,36 @@
        con un link diretto al luogo corrente.
        Su desktop mostra un tooltip con il link da copiare.
     ───────────────────────────────────────────────────── */
-    async function condividiPosizione() {
-      /* Legge le coordinate salvate dal modulo ES tramite dataset */
-      const lat = document.getElementById('btn-share').dataset.lat;
-      const lon = document.getElementById('btn-share').dataset.lon;
-      const citta = document.getElementById('msg-location-label').textContent || '';
+    /* Dati del messaggio appena inviato — salvati dal modulo ES */
+    window.__lastMsgLat  = null;
+    window.__lastMsgLon  = null;
+    window.__lastMsgCity = '';
 
-      if (!lat || !lon) {
-        alert('Posizione non ancora rilevata. Aspetta qualche secondo e riprova.');
-        return;
-      }
+    /* Mostra la modale di conferma dopo l'invio */
+    function mostraConfermaInvio(lat, lon, city) {
+      window.__lastMsgLat  = lat;
+      window.__lastMsgLon  = lon;
+      window.__lastMsgCity = city;
+      document.getElementById('overlay-conferma').classList.add('active');
+    }
+
+    /* Condivisione dopo invio — usa i dati dell'ultimo messaggio */
+    async function condividiDopoInvio() {
+      const lat   = window.__lastMsgLat;
+      const lon   = window.__lastMsgLon;
+      const citta = window.__lastMsgCity || '';
+
+      if (!lat || !lon) return;
 
       const url   = `https://bottlegram.web.app?lat=${lat}&lon=${lon}`;
       const title = 'Bottlegram';
-      const text  = `Guarda i messaggi lasciati in questo luogo: ${citta}`;
+      const text  = `Ho lasciato un messaggio in questo luogo: ${citta}`;
+
+      document.getElementById('overlay-conferma').classList.remove('active');
 
       if (navigator.share) {
-        try {
-          await navigator.share({ title, text, url });
-        } catch(e) {
-          // L'utente ha annullato — non fare nulla
-        }
+        try { await navigator.share({ title, text, url }); } catch(e) {}
       } else {
-        /* Fallback desktop: copia il link negli appunti */
         try {
           await navigator.clipboard.writeText(url);
           alert('✅ Link copiato negli appunti:\n' + url);
@@ -1395,13 +1418,6 @@
             userLon = parseFloat(pos.coords.longitude.toFixed(6));
             aggiornaURL(userLat, userLon);
 
-            // Passa le coordinate al bottone di condivisione
-            const btnShare = document.getElementById('btn-share');
-            if (btnShare) {
-              btnShare.dataset.lat = userLat;
-              btnShare.dataset.lon = userLon;
-            }
-
             // Reverse geocoding con OpenStreetMap Nominatim
             try {
               const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLon}&format=json`);
@@ -1497,7 +1513,7 @@
         setVisibilita('pubblico');
 
         closeModal('overlay-messaggio');
-        showToast('✅ Messaggio inviato!');
+        mostraConfermaInvio(userLat, userLon, userCity);
       } catch (e) {
         showToast('❌ Errore invio. Riprova.');
         console.error(e);
@@ -1760,6 +1776,8 @@
     document.getElementById('close-messaggio').addEventListener('click', () => closeModal('overlay-messaggio'));
     document.getElementById('close-lettore').addEventListener('click',   () => closeModal('overlay-lettore'));
     document.getElementById('close-privato').addEventListener('click',   () => closeModal('overlay-privato'));
+    document.getElementById('close-conferma').addEventListener('click',  () => closeModal('overlay-conferma'));
+    document.getElementById('btn-skip-condividi').addEventListener('click', () => closeModal('overlay-conferma'));
 
     // Chiusura modale cliccando fuori (sull'overlay semitrasparente)
     document.getElementById('overlay-messaggio').addEventListener('click', function (e) { if (e.target === this) closeModal('overlay-messaggio'); });
