@@ -950,6 +950,14 @@
             </a>
           </div>
         </div>
+        ${m.mapUrl ? `
+        <div class="detail-row">
+          <div class="detail-label">Mappa</div>
+          <a href="https://maps.google.com/?q=${m.lat},${m.lon}" target="_blank">
+            <img src="${m.mapUrl}" alt="Mappa"
+              style="width:100%;border-radius:6px;border:1px solid #e0e0e0;margin-top:4px;display:block;" />
+          </a>
+        </div>` : ''}
         <div class="detail-row">
           <div class="detail-label">Tipo</div>
           <div class="detail-value">

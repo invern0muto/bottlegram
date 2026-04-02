@@ -436,6 +436,21 @@
       font-size: 0.92rem;
     }
 
+    /* Miniatura mappa Mapbox nella card messaggio */
+    .msg-map {
+      width: 100%;
+      max-height: 140px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      display: block;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .msg-map:hover { opacity: 0.85; }
+
     /* Testo troncato a 4 righe */
     .msg-text.troncato {
       display: -webkit-box;
@@ -1365,9 +1380,22 @@
     }
 
     /* ─────────────────────────────────────────────────────
+       MAPBOX: Genera URL immagine statica della mappa
+       centrata sulle coordinate fornite con un pin rosso.
+    ───────────────────────────────────────────────────── */
+    /* Token configurato al deploy — non presente nel repository */
+    const MAPBOX_TOKEN = window.__mapboxToken || '';
+
+    function mapboxUrl(lat, lon) {
+      const marker = `pin-s-heart+111(${lon},${lat})`;
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${marker}/${lon},${lat},15,0/400x220@2x?access_token=${MAPBOX_TOKEN}`;
+    }
+
+    /* ─────────────────────────────────────────────────────
        FIRESTORE: Invia un nuovo messaggio al database.
        - Valida i campi obbligatori prima di procedere
-       - Salva nome, testo, coordinate, città, visibilità e timestamp
+       - Salva nome, testo, coordinate, città, visibilità,
+         URL mappa statica Mapbox e timestamp
        - Resetta il form e chiude la modale dopo l'invio
     ───────────────────────────────────────────────────── */
     async function inviaMessaggio() {
@@ -1390,6 +1418,8 @@
           visibilita,
           // Il destinatario viene salvato in minuscolo per confronti case-insensitive
           destinatario: visibilita === 'privato' ? destinatario.toLowerCase() : '',
+          // URL immagine mappa statica Mapbox del luogo del messaggio
+          mapUrl:       mapboxUrl(userLat, userLon),
           data:         serverTimestamp()
         });
 
@@ -1473,6 +1503,11 @@
                 <div class="msg-location">${m.citta}</div>
                 <div class="msg-text troncato">${m.testo}</div>
                 <button class="btn-espandi" onclick="toggleTesto(this)" style="display:none">LEGGI DI PIÙ</button>
+                ${m.mapUrl ? `<img class="msg-map"
+                  src="${m.mapUrl}"
+                  alt="Posizione messaggio"
+                  loading="lazy"
+                  onclick="window.open('https://maps.google.com/?q=${m.lat},${m.lon}','_blank')" />` : ''}
               </div>`;
           }
 
