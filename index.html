@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bottlegram</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+  <style>
+    /* ─── Variabili tema (light di default) ──────────────── */
+    :root {
+      --bg:           #fff;
+      --bg-secondary: #fafafa;
+      --text:         #111;
+      --text-muted:   #555;
+      --text-light:   #888;
+      --text-faint:   #bbb;
+      --border:       #ddd;
+      --border-light: #e0e0e0;
+      --border-eee:   #eee;
+      --header-bg:    #111;
+      --header-text:  #fff;
+      --card-bg:      #fff;
+      --modal-bg:     #fff;
+      --badge-pub-bg: #f0f0f0;
+      --badge-pub-cl: #333;
+      --input-bg:     #fafafa;
+      --no-msg-bg:    #f5f5f5;
+      --toast-bg:     #111;
+      --toast-text:   #fff;
+      --accent:       #111;
+      --accent-hover: #333;
+      --btn-sec-bg:   #fff;
+      --btn-sec-cl:   #111;
+      --btn-sec-hov:  #f5f5f5;
+    }
+
+    /* ─── Variabili tema dark (20:00 – 06:00) ────────────── */
+    body.dark {
+      --bg:           #0d0d0d;
+      --bg-secondary: #1a1a1a;
+      --text:         #f0f0f0;
+      --text-muted:   #aaa;
+      --text-light:   #777;
+      --text-faint:   #444;
+      --border:       #333;
+      --border-light: #2a2a2a;
+      --border-eee:   #222;
+      --header-bg:    #000;
+      --header-text:  #f0f0f0;
+      --card-bg:      #161616;
+      --modal-bg:     #161616;
+      --badge-pub-bg: #2a2a2a;
+      --badge-pub-cl: #ccc;
+      --input-bg:     #1a1a1a;
+      --no-msg-bg:    #1a1a1a;
+      --toast-bg:     #f0f0f0;
+      --toast-text:   #111;
+      --accent:       #f0f0f0;
+      --accent-hover: #ccc;
+      --btn-sec-bg:   #0d0d0d;
+      --btn-sec-cl:   #f0f0f0;
+      --btn-sec-hov:  #1a1a1a;
+    }
+
+    /* ─── Reset base ─────────────────────────────────────── */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      color: var(--text);
+      transition: background 0.5s, color 0.5s;
+    }
+
+    /* ─── Header ─────────────────────────────────────────── */
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 18px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.5s;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    /* Il logo è un link cliccabile che riporta alla home */
+    .header-logo-link {
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .header-logo-link:hover h1 {
+      opacity: 0.8;
+    }
+
+    /* Sottotitolo con la città rilevata (mostrato nell'header) */
+    .header-loc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ─── Pagina Home ─────────────────────────────────────── */
+    #page-home {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 60px);
+      text-align: center;
+      padding: 40px 20px;
+      gap: 14px;
+    }
+
+    /* Logo homepage */
+    #home-logo {
+      width: 140px;
+      height: auto;
+      margin-bottom: 4px;
+      transition: filter 0.5s;
+    }
+
+    /* In dark mode inverto il logo (tratti neri → bianchi) */
+    body.dark #home-logo {
+      filter: invert(1);
+    }
+
+    #page-home h2 {
+      font-size: 2.2rem;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    #page-home p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 380px;
+      line-height: 1.6;
+    }
+
+    /* ─── Bottoni ─────────────────────────────────────────── */
+
+    /* Bottone principale */
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      padding: 15px 40px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      width: 100%;
+      max-width: 360px;
+      transition: background 0.2s;
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    /* Variante secondaria */
+    .btn-primary.secondary {
+      background: var(--btn-sec-bg);
+      color: var(--btn-sec-cl);
+      border: 2px solid var(--accent);
+    }
+
+    .btn-primary.secondary:hover {
+      background: var(--btn-sec-hov);
+    }
+
+    /* Link testuale discreto */
+    .btn-link {
+      background: transparent;
+      color: var(--text);
+      border: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    .btn-link:hover {
+      opacity: 0.6;
+    }
+
+    /* ─── Overlay (sfondo scuro per le modali) ────────────── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* La classe .active viene aggiunta via JS per mostrare l'overlay */
+    .overlay.active {
+      display: flex;
+    }
+
+    /* ─── Modale ──────────────────────────────────────────── */
+    .modal {
+      background: var(--modal-bg);
+      padding: 32px 28px;
+      width: 90%;
+      max-width: 460px;
+      box-shadow: 0 0 0 1px var(--accent);
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+      transition: background 0.5s;
+    }
+
+    .modal h3 {
+      color: var(--text);
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    /* Campi input e textarea all'interno delle modali */
+    .modal input,
+    .modal textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: vertical;
+      background: var(--input-bg);
+      color: var(--text);
+      margin-bottom: 4px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .modal input:focus,
+    .modal textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg);
+    }
+
+    .modal textarea {
+      min-height: 110px;
+    }
+
+    .modal .btn-primary {
+      margin-top: 20px;
+      max-width: 100%;
+    }
+
+    /* Etichetta sopra ogni campo di input */
+    .input-label {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-bottom: 6px;
+      margin-top: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: block;
+    }
+
+    /* Pulsante X per chiudere la modale */
+    .close-btn {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-faint);
+    }
+
+    .close-btn:hover {
+      color: var(--text);
+    }
+
+    /* ─── Toggle Visibilità (Pubblico / Privato) ──────────── */
+    .visibility-toggle {
+      display: flex;
+      margin-top: 12px;
+      border: 1px solid var(--accent);
+    }
+
+    .visibility-toggle button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: var(--bg);
+      color: var(--text);
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+
+    /* Stato attivo del toggle */
+    .visibility-toggle button.active {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* Campo destinatario: visibile solo quando si sceglie "Privato" */
+    .field-destinatario {
+      display: none;
+    }
+
+    .field-destinatario.show {
+      display: block;
+    }
+
+    /* ─── Pagine interne (Messaggi / Chi siamo) ───────────── */
+    #page-messaggi,
+    #page-chisiamo {
+      display: none;
+      padding: 30px 20px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    #page-messaggi h2,
+    #page-chisiamo h2 {
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Sottotitolo con posizione attuale */
+    .subtitle {
+      color: var(--text-light);
+      margin-bottom: 24px;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* Pulsante "← Torna alla home" */
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-size: 0.82rem;
+      cursor: pointer;
+      margin-bottom: 24px;
+      display: block;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .back-btn:hover {
+      color: var(--text);
+    }
+
+    /* ─── Lista messaggi ──────────────────────────────────── */
+    .messages-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Card di un singolo messaggio */
+    .message-card {
+      background: var(--card-bg);
+      padding: 18px 20px;
+      border: 1px solid var(--border-light);
+      border-left: 3px solid var(--accent);
+      transition: background 0.5s, border-color 0.5s;
+    }
+
+    /* Variante per messaggi privati: bordo laterale attenuato */
+    .message-card.privato {
+      border-left-color: var(--text-light);
+    }
+
+    /* Header della card: autore a sinistra, data a destra */
+    .msg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .msg-author {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* Autore offuscato per messaggi privati non destinati all'utente */
+    .msg-author.privato {
+      color: var(--text-light);
+    }
+
+    .msg-date {
+      font-size: 0.72rem;
+      color: var(--text-faint);
+    }
+
+    .msg-location {
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      margin-bottom: 6px;
+    }
+
+    .msg-text {
+      color: var(--text-muted);
+      line-height: 1.6;
+      font-size: 0.92rem;
+    }
+
+    /* Testo troncato a 4 righe */
+    .msg-text.troncato {
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Bottone espandi/comprimi */
+    .btn-espandi {
+      display: inline-block;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      padding: 4px 12px;
+      margin-top: 10px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-espandi:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Badge "PUBBLICO" / "PRIVATO" sopra il testo del messaggio */
+    .msg-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      margin-bottom: 8px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .msg-badge.pub {
+      background: var(--badge-pub-bg);
+      color: var(--badge-pub-cl);
+    }
+
+    .msg-badge.priv {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* Etichetta con la distanza dal mittente */
+    .msg-distance {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    /* Testo mostrato al posto del contenuto nei messaggi privati bloccati */
+    .msg-locked {
+      color: var(--text-faint);
+      font-style: italic;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .msg-locked:hover {
+      color: var(--text);
+    }
+
+    /* Testo informativo nella modale "Chi sei?" */
+    .nome-lettore-info {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      margin-top: 6px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    /* Placeholder quando non ci sono messaggi */
+    .no-messages {
+      text-align: center;
+      color: var(--text-faint);
+      font-style: italic;
+      padding: 40px 0;
+      font-size: 0.9rem;
+    }
+
+    /* ─── Pagina "Chi siamo" ──────────────────────────────── */
+    #page-chisiamo p {
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 12px;
+      font-size: 0.92rem;
+    }
+
+    /* ─── Form suggerimenti inline ───────────────────────── */
+    #form-suggerimento {
+      margin-top: 28px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 24px;
+    }
+
+    #form-suggerimento h3 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    #form-suggerimento .form-desc {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    #form-suggerimento input,
+    #form-suggerimento select,
+    #form-suggerimento textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text);
+      margin-bottom: 4px;
+      appearance: none;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    #form-suggerimento select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+
+    #form-suggerimento input:focus,
+    #form-suggerimento select:focus,
+    #form-suggerimento textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg);
+    }
+
+    #form-suggerimento textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Messaggio di conferma dopo l'invio */
+    #sug-success {
+      display: none;
+      background: var(--no-msg-bg);
+      border-left: 3px solid var(--accent);
+      padding: 14px 16px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 12px;
+    }
+
+    /* Stato geolocalizzazione (dentro la modale invio) */
+    .geo-status {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      margin-top: 8px;
+    }
+
+    /* Spinner testuale durante il caricamento messaggi */
+    .loading {
+      text-align: center;
+      color: var(--text-faint);
+      padding: 30px;
+      font-size: 0.9rem;
+    }
+
+    /* ─── Toast (notifica temporanea in basso) ────────────── */
+    #toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--toast-bg);
+      color: var(--toast-text);
+      padding: 12px 28px;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: 999;
+      pointer-events: none;
+      letter-spacing: 1px;
+    }
+
+    #toast.show {
+      opacity: 1;
+    }
+
+    /* Divisore orizzontale */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border-eee);
+      margin: 16px 0;
+    }
+
+    /* ─── Icona sole/luna nell'header ──────────────────── */
+    #theme-indicator {
+      font-size: 1.1rem;
+      opacity: 0.7;
+      margin-left: auto;
+      user-select: none;
+    }
+
+    /* ─── Pagina QR Code ──────────────────────────────── */
+    #page-qrcode {
+      display: none;
+      padding: 30px 20px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    #page-qrcode h2 {
+      color: var(--text);
+      margin-bottom: 4px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Riquadro anteprima del volantino da stampare */
+    #qr-preview-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #fff;         /* sempre bianco — è un foglio da stampa */
+      border: 1px solid var(--border-light);
+      padding: 32px 24px 24px;
+      margin: 24px auto;
+      max-width: 320px;
+      gap: 14px;
+    }
+
+    #qr-preview-logo {
+      width: 100px;
+      height: auto;
+    }
+
+    #qr-preview-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      color: #111;
+      text-transform: uppercase;
+    }
+
+    #qr-preview-subtitle {
+      font-size: 0.72rem;
+      color: #888;
+      text-align: center;
+      letter-spacing: 0.5px;
+      line-height: 1.5;
+      max-width: 220px;
+    }
+
+    /* Canvas QR generato dalla libreria */
+    #qrcode-canvas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #qrcode-canvas canvas, #qrcode-canvas img {
+      display: block;
+    }
+
+    .qr-url-info {
+      font-size: 0.72rem;
+      color: #aaa;
+      text-align: center;
+      word-break: break-all;
+      max-width: 220px;
+    }
+
+    /* Bottone download */
+    #btn-download-qr {
+      max-width: 320px;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .qr-note {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+  </style>
+  <!-- Libreria per la generazione del QR code lato client -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+  <!-- ─── Header ──────────────────────────────────────────── -->
+  <header>
+    <!-- Cliccando sul logo si torna sempre alla home -->
+    <a class="header-logo-link" id="header-logo" href="#">
+      <div>
+        <h1>BOTTLEGRAM</h1>
+        <!-- Qui viene iniettata la città rilevata via JS -->
+        <div class="header-loc" id="header-raggio"></div>
+      </div>
+    </a>
+    <!-- Icona sole/luna che indica il tema attivo -->
+    <span id="theme-indicator"></span>
+  </header>
+
+  <!-- ─── Pagina Home ──────────────────────────────────────── -->
+  <div id="page-home">
+    <div id="home-logo">
+      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 292 258" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(4.16667,0,0,4.16667,-1872.82,-2329.6)">
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M686.257,660.359C686.351,661.065 686.357,661.832 686.244,662.674C686.509,661.794 686.49,661.026 686.257,660.359Z" style="fill:rgb(255,174,99);fill-rule:nonzero;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M288.545,694.026C278.899,692.808 270.195,690.136 262.767,685.957C254.672,681.403 247.435,673.822 252.229,666.812C252.832,665.93 250.862,665.148 250.196,666.042C245.371,672.509 249.751,679.444 256.34,684.65C264.078,690.765 275.702,694.808 287.61,696.221C289.821,696.483 290.776,694.309 288.545,694.026Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.558715,0,0,0.558715,-3.1474,391.134)">
+                <path d="M546.155,519.684C546.155,519.684 550.504,530.743 561.751,528.757" style="fill:none;stroke:black;stroke-width:0.84px;stroke-linecap:round;stroke-miterlimit:1.5;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M685.744,296.557C683.955,299.807 699.237,272.047 702.594,266.962C704.438,264.168 706.805,260.363 709.415,255.82C710.333,254.222 711.19,252.532 712.314,251.07C713.607,249.388 715.713,249.381 717.416,249.606C720.149,249.967 722.809,251.195 725.351,252.131C731.336,254.336 737.122,257.035 742.644,260.196C748.13,263.336 753.25,267.093 757.905,271.419C760.143,273.499 762.215,275.767 764.177,278.136C764.604,278.636 765,279.163 765.365,279.717C766.165,279.661 766.45,280.826 765.752,281.202C765.669,282.095 765.102,282.949 764.652,283.797C763.804,285.399 762.923,286.984 762.034,288.564C756.972,297.56 733.656,332.259 736.704,327.7C737.95,325.837 763.739,288.667 765.461,285.495C766.434,283.703 768.03,281.385 767.04,279.399C765.636,276.584 763.137,274.293 761.017,272.113C756.058,267.013 750.304,262.797 744.26,259.182C738.417,255.688 732.173,252.91 725.794,250.512C721.586,248.93 715.473,245.688 711.258,249.965C708.991,252.264 707.485,256.13 705.892,258.928C703.697,262.779 687.882,292.674 685.744,296.557Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.18px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M752.161,277.232C747.661,275.331 743.245,273.243 738.893,271.034C730.614,266.83 720.898,262.432 715.481,254.377C714.929,253.556 713.546,254.452 714.102,255.279C719.891,263.886 730.103,268.465 738.939,272.952C743.805,275.422 748.783,277.682 753.84,279.751C757.551,281.271 761.403,282.36 765.569,281.29C765.643,281.271 765.693,281.233 765.752,281.202C766.45,280.826 766.165,279.661 765.365,279.717C765.315,279.721 765.271,279.71 765.217,279.724C760.532,280.927 756.229,278.951 752.161,277.232Z" style="fill-rule:nonzero;stroke:black;stroke-width:2.55px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M617.452,454.252C617.369,454.184 617.283,454.121 617.199,454.054C617.213,454.199 617.194,454.35 617.094,454.505C616.862,454.861 616.645,455.225 616.419,455.583C617.348,456.075 618.359,454.989 617.452,454.252Z" style="fill-rule:nonzero;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M582.838,439.248C581.941,438.704 582.726,437.256 583.685,437.766C584.447,438.17 584.123,439.167 583.482,439.349C586.206,439.811 589.032,440.715 590.124,441.067C595.449,442.785 600.56,445.196 605.434,447.976C608.749,449.867 611.87,452.057 614.855,454.4C615.028,454.13 615.19,453.855 615.365,453.587C615.548,453.306 615.837,453.209 616.132,453.217C610.042,448.46 603.399,444.566 596.276,441.564C596.316,441.493 596.352,441.416 596.37,441.322C596.605,440.144 596.841,438.966 597.076,437.789C616.352,444.596 634.72,453.892 651.694,465.341C656.027,468.264 660.228,471.365 664.342,474.563C668.366,477.693 672.77,480.914 676.056,484.747C679.823,489.144 678.774,495.005 672.445,494.736C667.831,494.54 662.651,492.153 658.286,490.567C641.502,484.465 625.695,475.782 610.428,466.472C610.337,466.664 610.238,466.852 610.149,467.045C609.683,468.051 607.956,467.129 608.421,466.127C608.526,465.898 608.643,465.676 608.751,465.448C606.622,464.14 604.503,462.823 602.393,461.499C598.168,458.847 593.973,456.149 589.78,453.447C585.431,450.644 580.312,447.917 577.953,443.308C575.841,439.183 579.101,438.714 582.838,439.248ZM577.734,438.177C577.03,439.597 576.31,441.008 575.603,442.426C576.081,444.459 577.87,446.559 579.225,447.979C582.176,451.075 586.426,453.322 590.021,455.639C598.76,461.27 607.543,466.836 616.512,472.111C625.438,477.361 634.589,482.241 644.01,486.541C652.434,490.385 661.668,494.445 670.686,496.255C672.769,496.673 674.795,496.514 676.452,495.87C677.35,494.392 678.236,492.908 679.135,491.431C679.418,490.966 679.931,490.928 680.31,491.12C680.393,490.229 680.29,489.243 679.942,488.164C678.904,484.951 676.538,482.5 673.91,480.179C670.012,476.734 665.864,473.513 661.692,470.372C641.981,455.536 619.764,443.872 596.482,435.756C595.976,435.58 595.469,435.939 595.383,436.369C595.086,437.857 594.788,439.345 594.49,440.833C593.91,440.604 593.327,440.378 592.741,440.16C589.191,438.837 581.681,435.883 577.815,437.729C577.826,437.87 577.812,438.019 577.734,438.177Z" style="fill-rule:nonzero;stroke:black;stroke-width:3.97px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.215,645.817)">
+                <path d="M608.421,466.127C607.956,467.129 609.683,468.051 610.149,467.045C610.238,466.852 610.337,466.664 610.428,466.472C612.199,462.716 614.197,459.091 616.419,455.583C616.645,455.225 616.862,454.861 617.094,454.505C617.194,454.35 617.213,454.199 617.199,454.054C617.159,453.592 616.644,453.231 616.132,453.217C615.837,453.209 615.548,453.306 615.365,453.587C615.19,453.855 615.028,454.13 614.855,454.4C612.588,457.958 610.554,461.636 608.751,465.448C608.643,465.676 608.526,465.898 608.421,466.127Z" style="fill-rule:nonzero;stroke:black;stroke-width:3.97px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M583.482,439.349C584.123,439.167 584.447,438.17 583.685,437.766C582.726,437.256 581.941,438.704 582.838,439.248C582.854,439.258 582.862,439.273 582.88,439.283C583.097,439.397 583.301,439.401 583.482,439.349Z" style="fill-rule:nonzero;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.309,645.88)">
+                <path d="M575.603,442.426C576.31,441.008 577.03,439.597 577.734,438.177C577.812,438.019 577.826,437.87 577.815,437.729C577.755,436.979 576.632,436.537 576.218,437.372C542.497,505.371 505.489,571.722 465.354,636.145C458.071,647.836 450.668,659.453 443.178,671.013C443.797,671.109 444.417,671.198 445.037,671.291C485.614,608.613 523.206,544.021 557.642,477.769C563.737,466.043 569.71,454.254 575.603,442.426Z" style="fill-rule:nonzero;stroke:black;stroke-width:3.97px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.068,645.763)">
+                <path d="M680.651,492.236C680.943,491.757 680.697,491.317 680.31,491.12C679.931,490.928 679.418,490.966 679.135,491.431C678.236,492.908 677.35,494.392 676.452,495.87C640.047,555.851 605.108,616.718 571.652,678.393C572.293,678.402 572.934,678.413 573.574,678.422C599.019,631.529 625.321,585.104 652.479,539.18C661.768,523.471 671.164,507.825 680.651,492.236Z" style="fill-rule:nonzero;stroke:black;stroke-width:3.97px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M529.109,453.787C537.202,441.045 545.363,428.138 554.698,416.085C555.063,415.465 555.443,414.855 555.83,414.25C564.845,403.34 571.424,390.26 581.532,380.276C587.095,374.781 594.304,373.033 601.643,371.185C609.24,369.272 616.897,367.333 624.591,365.889C631.46,364.599 638.46,363.03 644.565,359.486C645.532,358.925 646.472,358.316 647.375,357.658C654.071,352.778 658.455,345.428 662.654,338.286C664.71,334.606 666.932,331.01 669.068,327.377C669.812,326.111 670.557,324.845 671.301,323.579C672.705,321.19 674.109,318.802 675.514,316.413C676.392,314.951 677.248,313.476 678.1,311.998C678.52,311.268 678.94,310.538 679.362,309.809C679.76,309.121 680.263,308.506 680.629,307.798C680.636,307.785 680.641,307.774 680.643,307.768C680.752,307.504 680.756,307.247 680.537,307.04C678.038,304.667 676.103,302.105 675.173,298.69C674.38,295.778 675.358,292.933 676.791,290.333C677.135,289.709 677.502,289.098 677.881,288.504C678.122,288.126 678.365,287.756 678.608,287.393C678.704,287.25 678.799,287.107 678.893,286.966C679.019,286.78 679.145,286.594 679.268,286.412C679.846,285.559 678.447,284.787 677.875,285.633C677.784,285.767 677.695,285.901 677.605,286.035C675.272,289.513 673.138,293.148 673.371,297.485C673.57,301.19 676.008,304.41 678.435,307.011C678.514,307.096 678.587,307.175 678.657,307.252C678.553,307.319 678.451,307.401 678.354,307.493C678.105,307.729 677.887,308.029 677.725,308.312C675.231,312.641 672.738,316.969 670.244,321.297C667.621,325.852 664.997,330.407 662.374,334.961C658.413,341.837 654.331,348.861 648.266,353.979C637.566,363.005 622.736,364.676 609.524,367.304C606.313,367.942 603.114,368.637 599.933,369.408C593.162,371.049 586.882,372.777 581.419,377.29C575.867,381.875 571.838,388.332 567.629,394.09C564.511,398.356 561.205,402.482 558.089,406.751C556.546,408.866 554.915,411.007 553.613,413.282C550.43,418.841 546.353,423.832 542.721,429.111C517.573,465.654 426.827,622.22 404.624,662.145C405.383,662.446 406.15,662.733 406.924,663.007C425.552,629.62 510.497,483.093 529.109,453.787Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.558715,0,0,0.558715,-3.1324,391.164)">
+                <path d="M545.754,519.499C545.754,519.499 548.219,518.74 548.799,519.384" style="fill:none;stroke:black;stroke-width:1.25px;stroke-linecap:round;stroke-miterlimit:1.5;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M709.363,416.213C708.824,414.291 708.265,412.366 707.686,410.434C705.104,401.806 703.008,393.077 705.526,385.242C708.193,376.943 712.987,369.435 716.98,361.785C717.612,360.574 718.244,359.364 718.876,358.153C722.259,351.671 725.643,345.19 729.025,338.709C729.088,338.588 729.031,338.335 729.126,338.241C729.301,338.067 729.551,338.244 729.728,338.302C730.058,338.409 730.418,338.445 730.757,338.505C731.449,338.629 732.146,338.727 732.848,338.787C740.478,339.44 749.362,335.723 750.51,327.279C750.512,327.266 750.506,327.256 750.508,327.244C750.601,326.264 749.096,325.891 748.959,326.899C748.785,328.173 748.427,329.301 747.94,330.314C744.866,336.713 736.162,338.094 729.515,336.601C729.143,336.517 728.77,336.421 728.399,336.325C728.35,336.304 728.299,336.289 728.246,336.287C727.637,336.599 727.223,337.671 726.828,338.371C723.489,344.766 720.151,351.161 716.813,357.556C714.972,361.085 713.13,364.614 711.288,368.143C706.778,376.783 701.308,385.366 702.508,396.149C703.06,401.117 704.375,405.963 705.775,410.748C706.479,413.154 707.214,415.551 707.907,417.961C708.37,419.569 708.689,420.88 709.495,422.333C712.692,428.097 714.456,434.525 716.102,440.866C717.641,446.791 719.109,452.647 717.689,458.786C714.423,472.904 706.49,485.583 701.966,499.286C696.443,514.389 689.352,528.858 682.382,543.169C673.144,562.135 639.98,624.485 611.087,678.176C612.038,678.146 612.989,678.103 613.94,678.068C646.433,617.496 684.936,544.256 696.31,518.548C698.81,512.897 701.216,507.129 703.419,501.25C703.53,501.165 703.628,501.053 703.702,500.907C707.424,493.559 710.101,485.495 713.216,477.867C715.912,471.265 719.298,464.448 720.292,457.316C721.269,450.299 719.448,444.045 717.296,437.419C714.957,430.219 712.237,423.204 709.363,416.213Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.558715,0,0,0.558715,-3.1324,391.164)">
+                <path d="M561.981,528.795C561.981,528.795 561.555,527.458 560.61,526.621" style="fill:none;stroke:black;stroke-width:1.25px;stroke-linecap:round;stroke-miterlimit:1.5;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M337.984,681.96C329.093,683.083 320.343,681.569 312.288,678.231C304.749,675.108 296.018,669.901 295.599,661.976C295.201,654.455 303.197,648.337 309.926,644.86C317.832,640.775 327.096,639.09 336.229,639.171C337.319,639.181 337.279,637.813 336.229,637.729C325.763,636.895 315.442,639.223 306.51,643.986C298.974,648.007 292.378,654.882 292.755,662.905C293.136,671.02 302.278,676.542 309.695,679.998C318.534,684.116 328.825,685.948 338.732,684.312C340.539,684.013 339.737,681.738 337.984,681.96Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M731.048,695.871C760.8,693.72 789.749,689.852 800.03,676.241C801.994,673.641 802.781,670.808 802.306,668.047C801.742,664.781 799.466,661.75 795.722,659.283C793.48,657.806 790.612,656.548 787.244,655.534C789.938,656.442 792.482,657.58 794.737,659.001C798.448,661.338 800.628,664.393 801.041,667.834C801.481,671.501 799.918,675.384 796.639,678.767C784.323,691.472 754.57,693.911 730.641,695.863C730.76,695.878 730.901,695.883 731.048,695.871Z" style="fill-rule:nonzero;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M801.041,667.834C800.628,664.393 798.448,661.338 794.737,659.001C792.482,657.58 789.938,656.442 787.244,655.534C790.612,656.548 793.48,657.806 795.722,659.283C799.466,661.75 801.742,664.781 802.306,668.047C802.781,670.808 801.994,673.641 800.03,676.241C789.749,689.852 760.8,693.72 731.048,695.871C730.901,695.883 730.76,695.878 730.641,695.863C754.57,693.911 784.323,691.472 796.639,678.767C799.918,675.384 801.481,671.501 801.041,667.834ZM803.742,667.799C803.11,664.126 800.613,660.76 796.523,658.065C787.035,651.812 770.479,651.137 763.803,651.137L763.493,651.138C762.364,651.141 761.848,651.776 761.846,652.365C761.844,652.957 762.357,653.597 763.488,653.607C776.547,653.729 787.368,656.083 793.96,660.234C797.286,662.33 799.234,665.018 799.593,668.008C799.979,671.23 798.559,674.69 795.593,677.751C783.646,690.074 754.154,692.481 730.457,694.416L730.294,694.429C728.637,694.563 728.594,695.597 728.602,695.803C728.638,696.677 729.617,697.335 730.88,697.335C730.969,697.335 731.06,697.332 731.153,697.325C761.248,695.149 790.563,691.195 801.193,677.12C803.407,674.189 804.288,670.967 803.742,667.799Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M596.798,730.098C579.343,733.337 561.629,734.937 543.874,734.68C525.575,734.414 507.624,731.685 489.738,727.997C488.559,727.755 488.064,729.473 489.238,729.811C523.955,739.814 562.306,740.142 597.534,732.768C599.291,732.399 598.535,729.775 596.798,730.098Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M388.486,627.803C378.204,626.751 367.661,628.325 358.136,632.344C357.137,632.765 357.528,634.405 358.596,634.014C368.311,630.447 378.167,629.103 388.486,629.944C389.872,630.058 389.839,627.941 388.486,627.803Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,0,0,1,201.6,-117.333)">
+            <g transform="matrix(0.124822,0,0,0.124822,217.175,645.763)">
+                <path d="M686.257,660.359C686.49,661.026 686.509,661.794 686.244,662.674C686.357,661.832 686.351,661.065 686.257,660.359ZM587.481,678.51C582.845,678.511 578.209,678.481 573.574,678.422C572.934,678.413 572.293,678.402 571.652,678.393C569.877,678.367 568.101,678.345 566.326,678.313C542.762,677.88 519.176,677.073 495.635,675.933C478.703,675.113 461.787,673.807 445.037,671.291C444.417,671.198 443.797,671.109 443.178,671.013C440.579,670.608 437.985,670.169 435.395,669.701C432.168,669.119 428.947,668.492 425.736,667.803C419.646,666.496 413.078,665.18 406.924,663.007C406.15,662.733 405.383,662.446 404.624,662.145C402.472,661.288 400.385,660.312 398.408,659.17C397.153,658.354 396.052,657.535 395.235,656.776C393.836,655.478 393.146,653.539 393.048,651.68C392.867,648.275 396.321,647.023 398.951,646.153C400.654,645.591 399.968,643.041 398.209,643.462C391.466,645.076 387.08,649.551 389.795,656.724C392.594,664.114 401.226,665.431 408.117,665.963C408.277,665.976 408.436,665.981 408.595,665.987C410.492,666.579 412.399,667.117 414.283,667.636C421.501,669.623 428.816,671.224 436.18,672.556C440.178,673.278 444.189,673.926 448.209,674.506C470.823,677.771 493.688,678.772 516.495,679.614C538.997,680.445 561.555,681.297 584.097,681.366C609.097,681.443 634.077,680.557 658.938,677.564C662.174,677.176 665.545,676.713 668.868,676.005C670.379,676.052 672.175,675.396 673.647,674.771C678.852,673.167 683.695,670.693 687.385,666.574C689.96,663.699 690.046,659.92 687.619,657.012C685.169,654.075 680.289,653.449 676.752,653.209C676.407,653.186 676.127,653.266 675.907,653.409C671.016,652.866 665.597,653.463 662.515,654.021C660.746,654.343 661.238,657.024 662.926,657.06C666.296,657.13 669.691,657.239 673.012,657.843C675.685,658.328 678.89,658.491 680.971,660.444C683.354,662.681 678.289,667.701 676.887,669.013C676.46,669.412 674.17,671.009 672.032,672.187C671.756,672.269 671.483,672.349 671.221,672.424C660.501,675.495 648.708,675.895 637.645,676.76C629.754,677.378 621.85,677.79 613.94,678.068C612.989,678.103 612.038,678.146 611.087,678.176C603.222,678.418 595.352,678.51 587.481,678.51Z" style="fill-rule:nonzero;stroke:black;stroke-width:4.38px;"/>
+            </g>
+        </g>
+    </g>
+</svg>
+    </div>
+    <h2>BOTTLEGRAM</h2>
+    <p>Lascia o scopri messaggi legati a questo luogo.</p>
+    <button class="btn-primary" id="btn-leggi">LEGGI I MESSAGGI</button>
+    <button class="btn-primary secondary" id="btn-lascia">LASCIA UN MESSAGGIO</button>
+    <button class="btn-link" id="btn-chisiamo">COS'È BOTTLEGRAM?</button>
+  </div>
+
+  <!-- ─── Pagina Messaggi ──────────────────────────────────── -->
+  <div id="page-messaggi">
+    <button class="back-btn" id="btn-back-msg">← TORNA ALLA HOME</button>
+    <h2>MESSAGGI</h2>
+    <!-- Viene aggiornato con la città rilevata -->
+    <p class="subtitle" id="msg-location-label">Caricamento posizione...</p>
+    <div class="messages-list" id="messages-list">
+      <div class="loading">Caricamento...</div>
+    </div>
+  </div>
+
+  <!-- ─── Pagina "Cos'è Bottlegram?" ─────────────────────── -->
+  <div id="page-chisiamo">
+    <button class="back-btn" id="btn-back-chi">← TORNA ALLA HOME</button>
+    <h2>COS'È BOTTLEGRAM?</h2>
+    <hr class="divider" />
+    <p>Bottlegram ti permette di lasciare messaggi virtuali legati a un luogo fisico, come messaggi in bottiglia digitali.</p>
+    <p>Puoi lasciare messaggi pubblici visibili a tutti nella tua zona, o messaggi privati visibili solo al destinatario.</p>
+    <p>I messaggi sono filtrati per distanza — vedi solo quelli vicini a te.</p>
+    <p>Il progetto è stato creato da <strong>Invernomuto</strong>, è totalmente gratuito e senza scopo di lucro.</p>
+
+    <button class="btn-primary" id="btn-qrcode" style="margin: 16px 0;">STAMPA IL TUO QR CODE</button>
+
+    <!-- ─── Form inline: suggerimenti e richieste QR ─── -->
+    <div id="form-suggerimento">
+      <h3>Hai un suggerimento o vuoi un QR code?</h3>
+      <p class="form-desc">Segnalaci un luogo interessante dove posizionare un QR code, oppure lasciaci un suggerimento per migliorare Bottlegram.</p>
+
+      <span class="input-label">Nome (opzionale)</span>
+      <input type="text" id="sug-nome" placeholder="Il tuo nome" />
+
+      <span class="input-label">Email di contatto</span>
+      <input type="email" id="sug-email" placeholder="tua@email.com" />
+
+      <span class="input-label">Tipo di richiesta</span>
+      <select id="sug-tipo">
+        <option value="suggerimento">💡 Suggerimento</option>
+        <option value="qrcode">📍 Richiesta QR code ETERNO</option>
+      </select>
+
+      <span class="input-label">Messaggio</span>
+      <textarea id="sug-testo" placeholder="Descrivi il tuo suggerimento o il luogo dove vorresti il QR code..."></textarea>
+
+      <button class="btn-primary" id="btn-invia-sug" style="margin-top: 16px;">INVIA</button>
+
+      <!-- Messaggio di conferma post-invio -->
+      <div id="sug-success">✅ Grazie! Il tuo messaggio è stato inviato con successo.</div>
+    </div>
+  </div>
+
+  <!-- ─── Pagina QR Code ─────────────────────────────────── -->
+  <div id="page-qrcode">
+    <button class="back-btn" id="btn-back-qr">← TORNA ALLA HOME</button>
+    <h2>STAMPA IL TUO QR CODE</h2>
+    <p class="subtitle">Scarica il volantino, stampalo e attaccalo dove vuoi — chiunque lo scansiona entra in Bottlegram.</p>
+
+    <!-- Anteprima del volantino da stampare -->
+    <div id="qr-preview-wrap">
+      <!-- Logo SVG inline -->
+      <div id="qr-preview-logo"></div>
+      <div id="qr-preview-title">BOTTLEGRAM</div>
+      <!-- Canvas QR generato da qrcode.js -->
+      <div id="qrcode-canvas"></div>
+      <div id="qr-preview-subtitle">Scan to leave or read messages in this place</div>
+      <!-- URL rimosso dal preview visivo -->
+    </div>
+
+    <button class="btn-primary" id="btn-download-qr">⬇️ SCARICA PNG</button>
+    <p class="qr-note" style="margin-top: 16px;">Il file scaricato è ad alta risoluzione (1200×1600px), pronto per la stampa su foglio A5 o A4.</p>
+  </div>
+
+  <!-- ─── Modale: Lascia un messaggio ─────────────────────── -->
+  <div class="overlay" id="overlay-messaggio">
+    <div class="modal">
+      <button class="close-btn" id="close-messaggio">×</button>
+      <h3>Lascia un messaggio</h3>
+
+      <span class="input-label">Il tuo nome (opzionale)</span>
+      <input type="text" id="input-nome" placeholder="Nome e Cognome" />
+
+      <span class="input-label">Messaggio</span>
+      <textarea id="input-messaggio" placeholder="Lascia un messaggio nella bottiglia..."></textarea>
+
+      <span class="input-label">Visibilità</span>
+      <div class="visibility-toggle">
+        <button id="btn-pubblico" class="active">🌍 Pubblico</button>
+        <button id="btn-privato">🔒 Privato</button>
+      </div>
+
+      <!-- Campo visibile solo se si sceglie "Privato" -->
+      <div class="field-destinatario" id="field-destinatario">
+        <span class="input-label">Destinatario</span>
+        <input type="text" id="input-destinatario" placeholder="Nome e Cognome" />
+      </div>
+
+      <!-- Stato in tempo reale della geolocalizzazione -->
+      <div class="geo-status" id="geo-status">📍 Rilevamento posizione...</div>
+
+      <button class="btn-primary" id="btn-invia">INVIA MESSAGGIO</button>
+    </div>
+  </div>
+
+  <!-- ─── Modale: Chi sei? (lettore) ──────────────────────── -->
+  <div class="overlay" id="overlay-lettore">
+    <div class="modal">
+      <button class="close-btn" id="close-lettore">×</button>
+      <h3>Chi sei?</h3>
+      <p class="nome-lettore-info">
+        Inserisci il tuo nome per vedere eventuali messaggi privati.
+        Lascia vuoto per vedere solo i messaggi pubblici.
+      </p>
+      <span class="input-label">Il tuo nome (opzionale)</span>
+      <input type="text" id="input-nome-lettore" placeholder="Nome e Cognome" />
+      <button class="btn-primary" id="btn-conferma-lettore" style="margin-top: 20px;">LEGGI I MESSAGGI</button>
+    </div>
+  </div>
+
+  <!-- ─── Modale: Contenuto messaggio privato ─────────────── -->
+  <div class="overlay" id="overlay-privato">
+    <div class="modal">
+      <button class="close-btn" id="close-privato">×</button>
+      <h3>Messaggio privato per te</h3>
+
+      <span class="input-label">Da</span>
+      <p id="privato-mittente" style="font-weight: 700; margin-top: 4px; color: #111; margin-bottom: 12px;"></p>
+
+      <span class="input-label">Messaggio</span>
+      <p id="privato-testo" style="margin-top: 8px; line-height: 1.7; color: #333;"></p>
+
+      <p id="privato-data"     style="margin-top: 12px; font-size: 0.72rem; color: #bbb;"></p>
+      <p id="privato-distanza" style="margin-top: 4px; font-size: 0.72rem; color: #888; font-weight: 600;"></p>
+    </div>
+  </div>
+
+  <!-- Contenitore toast (notifiche temporanee) -->
+  <div id="toast"></div>
+
+  <!-- Funzioni globali richiamate da onclick inline (devono stare fuori dal modulo ES) -->
+  <script>
+    function toggleTesto(btn) {
+      const el = btn.previousElementSibling;
+      if (el.classList.contains('troncato')) {
+        el.classList.remove('troncato');
+        btn.textContent = 'LEGGI MENO';
+      } else {
+        el.classList.add('troncato');
+        btn.textContent = 'LEGGI DI PIÙ';
+      }
+    }
+  </script>
+
+  <!-- ─── Script principale ────────────────────────────────── -->
+  <script type="module">
+
+    /* ── Import Firebase (Firestore) ────────────────────── */
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      getDocs,
+      orderBy,
+      query,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    /* ── Configurazione Firebase ────────────────────────── */
+    const firebaseConfig = {
+      apiKey:            "AIzaSyALSSvawoul6j5LdyXDK_Skc0myU5WZPIA",
+      authDomain:        "bottlegramdb.firebaseapp.com",
+      projectId:         "bottlegramdb",
+      storageBucket:     "bottlegramdb.firebasestorage.app",
+      messagingSenderId: "448000860787",
+      appId:             "1:448000860787:web:e09d0e54fdf83a249b8006"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    /* ── Stato globale ──────────────────────────────────── */
+    let userLat    = null;   // Latitudine dell'utente
+    let userLon    = null;   // Longitudine dell'utente
+    let userCity   = '';     // Nome del quartiere/città rilevato
+    let visibilita = 'pubblico'; // Visibilità del messaggio in composizione
+    let nomeLettore = '';    // Nome inserito dal lettore per filtrare messaggi privati
+
+    /* Raggio massimo (in metri) entro cui visualizzare i messaggi */
+    const RAGGIO = 100;
+
+    /* ─────────────────────────────────────────────────────
+       TEMA: Applica automaticamente il tema chiaro (6:00-20:00)
+       o scuro (20:00-6:00) in base all'ora locale.
+       Viene eseguito al caricamento e ogni minuto per gestire
+       il cambio di soglia a pagina aperta.
+    ───────────────────────────────────────────────────── */
+    function aggiornaTema() {
+      const ora    = new Date().getHours();
+      const isDark = ora >= 20 || ora < 6; // notte: 20:00 → 06:00
+      document.body.classList.toggle('dark', isDark);
+      document.getElementById('theme-indicator').textContent = isDark ? '🌙' : '☀️';
+    }
+
+    // Esegui subito al caricamento della pagina
+    aggiornaTema();
+
+    // Controlla ogni minuto (gestisce il cambio soglia a pagina aperta)
+    setInterval(aggiornaTema, 60000);
+
+    /* ─────────────────────────────────────────────────────
+       UTILITY: Calcolo distanza tra due coordinate (Haversine)
+       Restituisce la distanza in metri.
+    ───────────────────────────────────────────────────── */
+    function distanzaMetri(lat1, lon1, lat2, lon2) {
+      const R    = 6371000; // Raggio terrestre in metri
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    /* ─────────────────────────────────────────────────────
+       UTILITY: Formatta la distanza in metri o km leggibili
+    ───────────────────────────────────────────────────── */
+    function formatDistanza(m) {
+      if (m < 1000) return `${Math.round(m)}m`;
+      return `${(m / 1000).toFixed(1)}km`;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       UI: Mostra una notifica toast temporanea (3 secondi)
+    ───────────────────────────────────────────────────── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    /* ─────────────────────────────────────────────────────
+       UI: Naviga tra le pagine virtuali (SPA senza router)
+       Nasconde tutte le pagine e mostra solo quella richiesta.
+    ───────────────────────────────────────────────────── */
+    function showPage(page) {
+      document.getElementById('page-home').style.display     = 'none';
+      document.getElementById('page-messaggi').style.display = 'none';
+      document.getElementById('page-chisiamo').style.display = 'none';
+      document.getElementById('page-qrcode').style.display   = 'none';
+
+      if (page === 'home')      document.getElementById('page-home').style.display     = 'flex';
+      if (page === 'messaggi')  document.getElementById('page-messaggi').style.display = 'block';
+      if (page === 'chisiamo')  document.getElementById('page-chisiamo').style.display = 'block';
+      if (page === 'qrcode') {
+        document.getElementById('page-qrcode').style.display = 'block';
+        inizializzaQR();
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────
+       QR CODE: Genera il QR code e popola il preview del
+       volantino. Usa qrcode.js (caricato via CDN, non module).
+       Il download avviene disegnando tutto su un canvas HD.
+    ───────────────────────────────────────────────────── */
+
+    /* URL che il QR code encoderà — modifica con l'URL definitivo del tuo sito */
+    const QR_URL = window.location.origin + window.location.pathname;
+
+    /* Logo come data URL base64 per poterlo disegnare su canvas */
+    const LOGO_DATA_URL = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+Cjxzdmcgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDI5MiAyNTgiIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM6c2VyaWY9Imh0dHA6Ly93d3cuc2VyaWYuY29tLyIgc3R5bGU9ImZpbGwtcnVsZTpldmVub2RkO2NsaXAtcnVsZTpldmVub2RkO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtbWl0ZXJsaW1pdDoyOyI+CiAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCg0LjE2NjY3LDAsMCw0LjE2NjY3LC0xODcyLjgyLC0yMzI5LjYpIj4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMTI0ODIyLDAsMCwwLjEyNDgyMiwyMTcuMTc1LDY0NS43NjMpIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik02ODYuMjU3LDY2MC4zNTlDNjg2LjM1MSw2NjEuMDY1IDY4Ni4zNTcsNjYxLjgzMiA2ODYuMjQ0LDY2Mi42NzRDNjg2LjUwOSw2NjEuNzk0IDY4Ni40OSw2NjEuMDI2IDY4Ni4yNTcsNjYwLjM1OVoiIHN0eWxlPSJmaWxsOnJnYigyNTUsMTc0LDk5KTtmaWxsLXJ1bGU6bm9uemVybzsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMTI0ODIyLDAsMCwwLjEyNDgyMiwyMTcuMTc1LDY0NS43NjMpIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0yODguNTQ1LDY5NC4wMjZDMjc4Ljg5OSw2OTIuODA4IDI3MC4xOTUsNjkwLjEzNiAyNjIuNzY3LDY4NS45NTdDMjU0LjY3Miw2ODEuNDAzIDI0Ny40MzUsNjczLjgyMiAyNTIuMjI5LDY2Ni44MTJDMjUyLjgzMiw2NjUuOTMgMjUwLjg2Miw2NjUuMTQ4IDI1MC4xOTYsNjY2LjA0MkMyNDUuMzcxLDY3Mi41MDkgMjQ5Ljc1MSw2NzkuNDQ0IDI1Ni4zNCw2ODQuNjVDMjY0LjA3OCw2OTAuNzY1IDI3NS43MDIsNjk0LjgwOCAyODcuNjEsNjk2LjIyMUMyODkuODIxLDY5Ni40ODMgMjkwLjc3Niw2OTQuMzA5IDI4OC41NDUsNjk0LjAyNloiIHN0eWxlPSJmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6YmxhY2s7c3Ryb2tlLXdpZHRoOjQuMzhweDsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuNTU4NzE1LDAsMCwwLjU1ODcxNSwtMy4xNDc0LDM5MS4xMzQpIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik01NDYuMTU1LDUxOS42ODRDNTQ2LjE1NSw1MTkuNjg0IDU1MC41MDQsNTMwLjc0MyA1NjEuNzUxLDUyOC43NTciIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOmJsYWNrO3N0cm9rZS13aWR0aDowLjg0cHg7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6MS41OyIvPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMjAxLjYsLTExNy4zMzMpIj4KICAgICAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMC4xMjQ4MjIsMCwwLDAuMTI0ODIyLDIxNy4xNzUsNjQ1Ljc2MykiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTY4NS43NDQsMjk2LjU1N0M2ODMuOTU1LDI5OS44MDcgNjk5LjIzNywyNzIuMDQ3IDcwMi41OTQsMjY2Ljk2MkM3MDQuNDM4LDI2NC4xNjggNzA2LjgwNSwyNjAuMzYzIDcwOS40MTUsMjU1LjgyQzcxMC4zMzMsMjU0LjIyMiA3MTEuMTksMjUyLjUzMiA3MTIuMzE0LDI1MS4wN0M3MTMuNjA3LDI0OS4zODggNzE1LjcxMywyNDkuMzgxIDcxNy40MTYsMjQ5LjYwNkM3MjAuMTQ5LDI0OS45NjcgNzIyLjgwOSwyNTEuMTk1IDcyNS4zNTEsMjUyLjEzMUM3MzEuMzM2LDI1NC4zMzYgNzM3LjEyMiwyNTcuMDM1IDc0Mi42NDQsMjYwLjE5NkM3NDguMTMsMjYzLjMzNiA3NTMuMjUsMjY3LjA5MyA3NTcuOTA1LDI3MS40MTlDNzYwLjE0MywyNzMuNDk5IDc2Mi4yMTUsMjc1Ljc2NyA3NjQuMTc3LDI3OC4xMzZDNzY0LjYwNCwyNzguNjM2IDc2NSwyNzkuMTYzIDc2NS4zNjUsMjc5LjcxN0M3NjYuMTY1LDI3OS42NjEgNzY2LjQ1LDI4MC44MjYgNzY1Ljc1MiwyODEuMjAyQzc2NS42NjksMjgyLjA5NSA3NjUuMTAyLDI4Mi45NDkgNzY0LjY1MiwyODMuNzk3Qzc2My44MDQsMjg1LjM5OSA3NjIuOTIzLDI4Ni45ODQgNzYyLjAzNCwyODguNTY0Qzc1Ni45NzIsMjk3LjU2IDczMy42NTYsMzMyLjI1OSA3MzYuNzA0LDMyNy43QzczNy45NSwzMjUuODM3IDc2My43MzksMjg4LjY2NyA3NjUuNDYxLDI4NS40OTVDNzY2LjQzNCwyODMuNzAzIDc2OC4wMywyODEuMzg1IDc2Ny4wNCwyNzkuMzk5Qzc2NS42MzYsMjc2LjU4NCA3NjMuMTM3LDI3NC4yOTMgNzYxLjAxNywyNzIuMTEzQzc1Ni4wNTgsMjY3LjAxMyA3NTAuMzA0LDI2Mi43OTcgNzQ0LjI2LDI1OS4xODJDNzM4LjQxNywyNTUuNjg4IDczMi4xNzMsMjUyLjkxIDcyNS43OTQsMjUwLjUxMkM3MjEuNTg2LDI0OC45MyA3MTUuNDczLDI0NS42ODggNzExLjI1OCwyNDkuOTY1QzcwOC45OTEsMjUyLjI2NCA3MDcuNDg1LDI1Ni4xMyA3MDUuODkyLDI1OC45MjhDNzAzLjY5NywyNjIuNzc5IDY4Ny44ODIsMjkyLjY3NCA2ODUuNzQ0LDI5Ni41NTdaIiBzdHlsZT0iZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOmJsYWNrO3N0cm9rZS13aWR0aDo0LjE4cHg7Ii8+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwyMDEuNiwtMTE3LjMzMykiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgwLjEyNDgyMiwwLDAsMC4xMjQ4MjIsMjE3LjE3NSw2NDUuNzYzKSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNzUyLjE2MSwyNzcuMjMyQzc0Ny42NjEsMjc1LjMzMSA3NDMuMjQ1LDI3My4yNDMgNzM4Ljg5MywyNzEuMDM0QzczMC42MTQsMjY2LjgzIDcyMC44OTgsMjYyLjQzMiA3MTUuNDgxLDI1NC4zNzdDNzE0LjkyOSwyNTMuNTU2IDcxMy41NDYsMjU0LjQ1MiA3MTQuMTAyLDI1NS4yNzlDNzE5Ljg5MSwyNjMuODg2IDczMC4xMDMsMjY4LjQ2NSA3MzguOTM5LDI3Mi45NTJDNzQzLjgwNSwyNzUuNDIyIDc0OC43ODMsMjc3LjY4MiA3NTMuODQsMjc5Ljc1MUM3NTcuNTUxLDI4MS4yNzEgNzYxLjQwMywyODIuMzYgNzY1LjU2OSwyODEuMjlDNzY1LjY0MywyODEuMjcxIDc2NS42OTMsMjgxLjIzMyA3NjUuNzUyLDI4MS4yMDJDNzY2LjQ1LDI4MC44MjYgNzY2LjE2NSwyNzkuNjYxIDc2NS4zNjUsMjc5LjcxN0M3NjUuMzE1LDI3OS43MjEgNzY1LjI3MSwyNzkuNzEgNzY1LjIxNywyNzkuNzI0Qzc2MC41MzIsMjgwLjkyNyA3NTYuMjI5LDI3OC45NTEgNzUyLjE2MSwyNzcuMjMyWiIgc3R5bGU9ImZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpibGFjaztzdHJva2Utd2lkdGg6Mi41NXB4OyIvPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMjAxLjYsLTExNy4zMzMpIj4KICAgICAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMC4xMjQ4MjIsMCwwLDAuMTI0ODIyLDIxNy4xNzUsNjQ1Ljc2MykiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTYxNy40NTIsNDU0LjI1MkM2MTcuMzY5LDQ1NC4xODQgNjE3LjI4Myw0NTQuMTIxIDYxNy4xOTksNDU0LjA1NEM2MTcuMjEzLDQ1NC4xOTkgNjE3LjE5NCw0NTQuMzUgNjE3LjA5NCw0NTQuNTA1QzYxNi44NjIsNDU0Ljg2MSA2MTYuNjQ1LDQ1NS4yMjUgNjE2LjQxOSw0NTUuNTgzQzYxNy4zNDgsNDU2LjA3NSA2MTguMzU5LDQ1NC45ODkgNjE3LjQ1Miw0NTQuMjUyWiIgc3R5bGU9ImZpbGwtcnVsZTpub256ZXJvOyIvPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMjAxLjYsLTExNy4zMzMpIj4KICAgICAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMC4xMjQ4MjIsMCwwLDAuMTI0ODIyLDIxNy4xNzUsNjQ1Ljc2MykiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTU4Mi44MzgsNDM5LjI0OEM1ODEuOTQxLDQzOC43MDQgNTgyLjcyNiw0MzcuMjU2IDU4My42ODUsNDM3Ljc2NkM1ODQuNDQ3LDQzOC4xNyA1ODQuMTIzLDQzOS4xNjcgNTgzLjQ4Miw0MzkuMzQ5QzU4Ni4yMDYsNDM5LjgxMSA1ODkuMDMyLDQ0MC43MTUgNTkwLjEyNCw0NDEuMDY3QzU5NS40NDksNDQyLjc4NSA2MDAuNTYsNDQ1LjE5NiA2MDUuNDM0LDQ0Ny45NzZDNjA4Ljc0OSw0NDkuODY3IDYxMS44Nyw0NTIuMDU3IDYxNC44NTUsNDU0LjRDNjE1LjAyOCw0NTQuMTMgNjE1LjE5LDQ1My44NTUgNjE1LjM2NSw0NTMuNTg3QzYxNS41NDgsNDUzLjMwNiA2MTUuODM3LDQ1My4yMDkgNjE2LjEzMiw0NTMuMjE3QzYxMC4wNDIsNDQ4LjQ2IDYwMy4zOTksNDQ0LjU2NiA1OTYuMjc2LDQ0MS41NjRDNTk2LjMxNiw0NDEuNDkzIDU5Ni4zNTIsNDQxLjQxNiA1OTYuMzcsNDQxLjMyMkM1OTYuNjA1LDQ0MC4xNDQgNTk2Ljg0MSw0MzguOTY2IDU5Ny4wNzYsNDM3Ljc4OUM2MTYuMzUyLDQ0NC41OTYgNjM0LjcyLDQ1My44OTIgNjUxLjY5NCw0NjUuMzQxQzY1Ni4wMjcsNDY4LjI2NCA2NjAuMjI4LDQ3MS4zNjUgNjY0LjM0Miw0NzQuNTYzQzY2OC4zNjYsNDc3LjY5MyA2NzIuNzcsNDgwLjkxNCA2NzYuMDU2LDQ4NC43NDdDNjc5LjgyMyw0ODkuMTQ0IDY3OC43NzQsNDk1LjAwNSA2NzIuNDQ1LDQ5NC43MzZDNjY3LjgzMSw0OTQuNTQgNjYyLjY1MSw0OTIuMTUzIDY1OC4yODYsNDkwLjU2N0M2NDEuNTAyLDQ4NC40NjUgNjI1LjY5NSw0NzUuNzgyIDYxMC40MjgsNDY2LjQ3MkM2MTAuMzM3LDQ2Ni42NjQgNjEwLjIzOCw0NjYuODUyIDYxMC4xNDksNDY3LjA0NUM2MDkuNjgzLDQ2OC4wNTEgNjA3Ljk1Niw0NjcuMTI5IDYwOC40MjEsNDY2LjEyN0M2MDguNTI2LDQ2NS44OTggNjA4LjY0Myw0NjUuNjc2IDYwOC43NTEsNDY1LjQ0OEM2MDYuNjIyLDQ2NC4xNCA2MDQuNTAzLDQ2Mi44MjMgNjAyLjM5Myw0NjEuNDk5QzU5OC4xNjgsNDU4Ljg0NyA1OTMuOTczLDQ1Ni4xNDkgNTg5Ljc4LDQ1My40NDdDNTg1LjQzMSw0NTAuNjQ0IDU4MC4zMTIsNDQ3LjkxNyA1NzcuOTUzLDQ0My4zMDhDNTc1Ljg0MSw0MzkuMTgzIDU3OS4xMDEsNDM4LjcxNCA1ODIuODM4LDQzOS4yNDhaTTU3Ny43MzQsNDM4LjE3N0M1NzcuMDMsNDM5LjU5NyA1NzYuMzEsNDQxLjAwOCA1NzUuNjAzLDQ0Mi40MjZDNTc2LjA4MSw0NDQuNDU5IDU3Ny44Nyw0NDYuNTU5IDU3OS4yMjUsNDQ3Ljk3OUM1ODIuMTc2LDQ1MS4wNzUgNTg2LjQyNiw0NTMuMzIyIDU5MC4wMjEsNDU1LjYzOUM1OTguNzYsNDYxLjI3IDYwNy41NDMsNDY2LjgzNiA2MTYuNTEyLDQ3Mi4xMTFDNjI1LjQzOCw0NzcuMzYxIDYzNC41ODksNDgyLjI0MSA2NDQuMDEsNDg2LjU0MUM2NTIuNDM0LDQ5MC4zODUgNjYxLjY2OCw0OTQuNDQ1IDY3MC42ODYsNDk2LjI1NUM2NzIuNzY5LDQ5Ni42NzMgNjc0Ljc5NSw0OTYuNTE0IDY3Ni40NTIsNDk1Ljg3QzY3Ny4zNSw0OTQuMzkyIDY3OC4yMzYsNDkyLjkwOCA2NzkuMTM1LDQ5MS40MzFDNjc5LjQxOCw0OTAuOTY2IDY3OS45MzEsNDkwLjkyOCA2ODAuMzEsNDkxLjEyQzY4MC4zOTMsNDkwLjIyOSA2ODAuMjksNDg5LjI0MyA2NzkuOTQyLDQ4OC4xNjRDNjc4LjkwNCw0ODQuOTUxIDY3Ni41MzgsNDgyLjUgNjczLjkxLDQ4MC4xNzlDNjcwLjAxMiw0NzYuNzM0IDY2NS44NjQsNDczLjUxMyA2NjEuNjkyLDQ3MC4zNzJDNjQxLjk4MSw0NTUuNTM2IDYxOS43NjQsNDQzLjg3MiA1OTYuNDgyLDQzNS43NTZDNTk1Ljk3Niw0MzUuNTggNTk1LjQ2OSw0MzUuOTM5IDU5NS4zODMsNDM2LjM2OUM1OTUuMDg2LDQzNy44NTcgNTk0Ljc4OCw0MzkuMzQ1IDU5NC40OSw0NDAuODMzQzU5My45MSw0NDAuNjA0IDU5My4zMjcsNDQwLjM3OCA1OTIuNzQxLDQ0MC4xNkM1ODkuMTkxLDQzOC44MzcgNTgxLjY4MSw0MzUuODgzIDU3Ny44MTUsNDM3LjcyOUM1NzcuODI2LDQzNy44NyA1NzcuODEyLDQzOC4wMTkgNTc3LjczNCw0MzguMTc3WiIgc3R5bGU9ImZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpibGFjaztzdHJva2Utd2lkdGg6My45N3B4OyIvPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMjAxLjYsLTExNy4zMzMpIj4KICAgICAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMC4xMjQ4MjIsMCwwLDAuMTI0ODIyLDIxNy4yMTUsNjQ1LjgxNykiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTYwOC40MjEsNDY2LjEyN0M2MDcuOTU2LDQ2Ny4xMjkgNjA5LjY4Myw0NjguMDUxIDYxMC4xNDksNDY3LjA0NUM2MTAuMjM4LDQ2Ni44NTIgNjEwLjMzNyw0NjYuNjY0IDYxMC40MjgsNDY2LjQ3MkM2MTIuMTk5LDQ2Mi43MTYgNjE0LjE5Nyw0NTkuMDkxIDYxNi40MTksNDU1LjU4M0M2MTYuNjQ1LDQ1NS4yMjUgNjE2Ljg2Miw0NTQuODYxIDYxNy4wOTQsNDU0LjUwNUM2MTcuMTk0LDQ1NC4zNSA2MTcuMjEzLDQ1NC4xOTkgNjE3LjE5OSw0NTQuMDU0QzYxNy4xNTksNDUzLjU5MiA2MTYuNjQ0LDQ1My4yMzEgNjE2LjEzMiw0NTMuMjE3QzYxNS44MzcsNDUzLjIwOSA2MTUuNTQ4LDQ1My4zMDYgNjE1LjM2NSw0NTMuNTg3QzYxNS4xOSw0NTMuODU1IDYxNS4wMjgsNDU0LjEzIDYxNC44NTUsNDU0LjRDNjEyLjU4OCw0NTcuOTU4IDYxMC41NTQsNDYxLjYzNiA2MDguNzUxLDQ2NS40NDhDNjA4LjY0Myw0NjUuNjc2IDYwOC41MjYsNDY1Ljg5OCA2MDguNDIxLDQ2Ni4xMjdaIiBzdHlsZT0iZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOmJsYWNrO3N0cm9rZS13aWR0aDozLjk3cHg7Ii8+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwyMDEuNiwtMTE3LjMzMykiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgwLjEyNDgyMiwwLDAsMC4xMjQ4MjIsMjE3LjE3NSw2NDUuNzYzKSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNTgzLjQ4Miw0MzkuMzQ5QzU4NC4xMjMsNDM5LjE2NyA1ODQuNDQ3LDQzOC4xNyA1ODMuNjg1LDQzNy43NjZDNTgyLjcyNiw0MzcuMjU2IDU4MS45NDEsNDM4LjcwNCA1ODIuODM4LDQzOS4yNDhDNTgyLjg1NCw0MzkuMjU4IDU4Mi44NjIsNDM5LjI3MyA1ODIuODgsNDM5LjI4M0M1ODMuMDk3LDQzOS4zOTcgNTgzLjMwMSw0MzkuNDAxIDU4My40ODIsNDM5LjM0OVoiIHN0eWxlPSJmaWxsLXJ1bGU6bm9uemVybzsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMTI0ODIyLDAsMCwwLjEyNDgyMiwyMTcuMzA5LDY0NS44OCkiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTU3NS42MDMsNDQyLjQyNkM1NzYuMzEsNDQxLjAwOCA1NzcuMDMsNDM5LjU5NyA1NzcuNzM0LDQzOC4xNzdDNTc3LjgxMiw0MzguMDE5IDU3Ny44MjYsNDM3Ljg3IDU3Ny44MTUsNDM3LjcyOUM1NzcuNzU1LDQzNi45NzkgNTc2LjYzMiw0MzYuNTM3IDU3Ni4yMTgsNDM3LjM3MkM1NDIuNDk3LDUwNS4zNzEgNTA1LjQ4OSw1NzEuNzIyIDQ2NS4zNTQsNjM2LjE0NUM0NTguMDcxLDY0Ny44MzYgNDUwLjY2OCw2NTkuNDUzIDQ0My4xNzgsNjcxLjAxM0M0NDMuNzk3LDY3MS4xMDkgNDQ0LjQxNyw2NzEuMTk4IDQ0NS4wMzcsNjcxLjI5MUM0ODUuNjE0LDYwOC42MTMgNTIzLjIwNiw1NDQuMDIxIDU1Ny42NDIsNDc3Ljc2OUM1NjMuNzM3LDQ2Ni4wNDMgNTY5LjcxLDQ1NC4yNTQgNTc1LjYwMyw0NDIuNDI2WiIgc3R5bGU9ImZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpibGFjaztzdHJva2Utd2lkdGg6My45N3B4OyIvPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMjAxLjYsLTExNy4zMzMpIj4KICAgICAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMC4xMjQ4MjIsMCwwLDAuMTI0ODIyLDIxNy4wNjgsNjQ1Ljc2MykiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTY4MC42NTEsNDkyLjIzNkM2ODAuOTQzLDQ5MS43NTcgNjgwLjY5Nyw0OTEuMzE3IDY4MC4zMSw0OTEuMTJDNjc5LjkzMSw0OTAuOTI4IDY3OS40MTgsNDkwLjk2NiA2NzkuMTM1LDQ5MS40MzFDNjc4LjIzNiw0OTIuOTA4IDY3Ny4zNSw0OTQuMzkyIDY3Ni40NTIsNDk1Ljg3QzY0MC4wNDcsNTU1Ljg1MSA2MDUuMTA4LDYxNi43MTggNTcxLjY1Miw2NzguMzkzQzU3Mi4yOTMsNjc4LjQwMiA1NzIuOTM0LDY3OC40MTMgNTczLjU3NCw2NzguNDIyQzU5OS4wMTksNjMxLjUyOSA2MjUuMzIxLDU4NS4xMDQgNjUyLjQ3OSw1MzkuMThDNjYxLjc2OCw1MjMuNDcxIDY3MS4xNjQsNTA3LjgyNSA2ODAuNjUxLDQ5Mi4yMzZaIiBzdHlsZT0iZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOmJsYWNrO3N0cm9rZS13aWR0aDozLjk3cHg7Ii8+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwyMDEuNiwtMTE3LjMzMykiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgwLjEyNDgyMiwwLDAsMC4xMjQ4MjIsMjE3LjE3NSw2NDUuNzYzKSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNTI5LjEwOSw0NTMuNzg3QzUzNy4yMDIsNDQxLjA0NSA1NDUuMzYzLDQyOC4xMzggNTU0LjY5OCw0MTYuMDg1QzU1NS4wNjMsNDE1LjQ2NSA1NTUuNDQzLDQxNC44NTUgNTU1LjgzLDQxNC4yNUM1NjQuODQ1LDQwMy4zNCA1NzEuNDI0LDM5MC4yNiA1ODEuNTMyLDM4MC4yNzZDNTg3LjA5NSwzNzQuNzgxIDU5NC4zMDQsMzczLjAzMyA2MDEuNjQzLDM3MS4xODVDNjA5LjI0LDM2OS4yNzIgNjE2Ljg5NywzNjcuMzMzIDYyNC41OTEsMzY1Ljg4OUM2MzEuNDYsMzY0LjU5OSA2MzguNDYsMzYzLjAzIDY0NC41NjUsMzU5LjQ4NkM2NDUuNTMyLDM1OC45MjUgNjQ2LjQ3MiwzNTguMzE2IDY0Ny4zNzUsMzU3LjY1OEM2NTQuMDcxLDM1Mi43NzggNjU4LjQ1NSwzNDUuNDI4IDY2Mi42NTQsMzM4LjI4NkM2NjQuNzEsMzM0LjYwNiA2NjYuOTMyLDMzMS4wMSA2NjkuMDY4LDMyNy4zNzdDNjY5LjgxMiwzMjYuMTExIDY3MC41NTcsMzI0Ljg0NSA2NzEuMzAxLDMyMy41NzlDNjcyLjcwNSwzMjEuMTkgNjc0LjEwOSwzMTguODAyIDY3NS41MTQsMzE2LjQxM0M2NzYuMzkyLDMxNC45NTEgNjc3LjI0OCwzMTMuNDc2IDY3OC4xLDMxMS45OThDNjc4LjUyLDMxMS4yNjggNjc4Ljk0LDMxMC41MzggNjc5LjM2MiwzMDkuODA5QzY3OS43NiwzMDkuMTIxIDY4MC4yNjMsMzA4LjUwNiA2ODAuNjI5LDMwNy43OThDNjgwLjYzNiwzMDcuNzg1IDY4MC42NDEsMzA3Ljc3NCA2ODAuNjQzLDMwNy43NjhDNjgwLjc1MiwzMDcuNTA0IDY4MC43NTYsMzA3LjI0NyA2ODAuNTM3LDMwNy4wNEM2NzguMDM4LDMwNC42NjcgNjc2LjEwMywzMDIuMTA1IDY3NS4xNzMsMjk4LjY5QzY3NC4zOCwyOTUuNzc4IDY3NS4zNTgsMjkyLjkzMyA2NzYuNzkxLDI5MC4zMzNDNjc3LjEzNSwyODkuNzA5IDY3Ny41MDIsMjg5LjA5OCA2NzcuODgxLDI4OC41MDRDNjc4LjEyMiwyODguMTI2IDY3OC4zNjUsMjg3Ljc1NiA2NzguNjA4LDI4Ny4zOTNDNjc4LjcwNCwyODcuMjUgNjc4Ljc5OSwyODcuMTA3IDY3OC44OTMsMjg2Ljk2NkM2NzkuMDE5LDI4Ni43OCA2NzkuMTQ1LDI4Ni41OTQgNjc5LjI2OCwyODYuNDEyQzY3OS44NDYsMjg1LjU1OSA2NzguNDQ3LDI4NC43ODcgNjc3Ljg3NSwyODUuNjMzQzY3Ny43ODQsMjg1Ljc2NyA2NzcuNjk1LDI4NS45MDEgNjc3LjYwNSwyODYuMDM1QzY3NS4yNzIsMjg5LjUxMyA2NzMuMTM4LDI5My4xNDggNjczLjM3MSwyOTcuNDg1QzY3My41NywzMDEuMTkgNjc2LjAwOCwzMDQuNDEgNjc4LjQzNSwzMDcuMDExQzY3OC41MTQsMzA3LjA5NiA2NzguNTg3LDMwNy4xNzUgNjc4LjY1NywzMDcuMjUyQzY3OC41NTMsMzA3LjMxOSA2NzguNDUxLDMwNy40MDEgNjc4LjM1NCwzMDcuNDkzQzY3OC4xMDUsMzA3LjcyOSA2NzcuODg3LDMwOC4wMjkgNjc3LjcyNSwzMDguMzEyQzY3NS4yMzEsMzEyLjY0MSA2NzIuNzM4LDMxNi45NjkgNjcwLjI0NCwzMjEuMjk3QzY2Ny42MjEsMzI1Ljg1MiA2NjQuOTk3LDMzMC40MDcgNjYyLjM3NCwzMzQuOTYxQzY1OC40MTMsMzQxLjgzNyA2NTQuMzMxLDM0OC44NjEgNjQ4LjI2NiwzNTMuOTc5QzYzNy41NjYsMzYzLjAwNSA2MjIuNzM2LDM2NC42NzYgNjA5LjUyNCwzNjcuMzA0QzYwNi4zMTMsMzY3Ljk0MiA2MDMuMTE0LDM2OC42MzcgNTk5LjkzMywzNjkuNDA4QzU5My4xNjIsMzcxLjA0OSA1ODYuODgyLDM3Mi43NzcgNTgxLjQxOSwzNzcuMjlDNTc1Ljg2NywzODEuODc1IDU3MS44MzgsMzg4LjMzMiA1NjcuNjI5LDM5NC4wOUM1NjQuNTExLDM5OC4zNTYgNTYxLjIwNSw0MDIuNDgyIDU1OC4wODksNDA2Ljc1MUM1NTYuNTQ2LDQwOC44NjYgNTU0LjkxNSw0MTEuMDA3IDU1My42MTMsNDEzLjI4MkM1NTAuNDMsNDE4Ljg0MSA1NDYuMzUzLDQyMy44MzIgNTQyLjcyMSw0MjkuMTExQzUxNy41NzMsNDY1LjY1NCA0MjYuODI3LDYyMi4yMiA0MDQuNjI0LDY2Mi4xNDVDNDA1LjM4Myw2NjIuNDQ2IDQwNi4xNSw2NjIuNzMzIDQwNi45MjQsNjYzLjAwN0M0MjUuNTUyLDYyOS42MiA1MTAuNDk3LDQ4My4wOTMgNTI5LjEwOSw0NTMuNzg3WiIgc3R5bGU9ImZpbGwtcnVsZTpub256ZXJvO3N0cm9rZTpibGFjaztzdHJva2Utd2lkdGg6NC4zOHB4OyIvPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMjAxLjYsLTExNy4zMzMpIj4KICAgICAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMC41NTg3MTUsMCwwLDAuNTU4NzE1LC0zLjEzMjQsMzkxLjE2NCkiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTU0NS43NTQsNTE5LjQ5OUM1NDUuNzU0LDUxOS40OTkgNTQ4LjIxOSw1MTguNzQgNTQ4Ljc5OSw1MTkuMzg0IiBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTpibGFjaztzdHJva2Utd2lkdGg6MS4yNXB4O3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1taXRlcmxpbWl0OjEuNTsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMTI0ODIyLDAsMCwwLjEyNDgyMiwyMTcuMTc1LDY0NS43NjMpIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik03MDkuMzYzLDQxNi4yMTNDNzA4LjgyNCw0MTQuMjkxIDcwOC4yNjUsNDEyLjM2NiA3MDcuNjg2LDQxMC40MzRDNzA1LjEwNCw0MDEuODA2IDcwMy4wMDgsMzkzLjA3NyA3MDUuNTI2LDM4NS4yNDJDNzA4LjE5MywzNzYuOTQzIDcxMi45ODcsMzY5LjQzNSA3MTYuOTgsMzYxLjc4NUM3MTcuNjEyLDM2MC41NzQgNzE4LjI0NCwzNTkuMzY0IDcxOC44NzYsMzU4LjE1M0M3MjIuMjU5LDM1MS42NzEgNzI1LjY0MywzNDUuMTkgNzI5LjAyNSwzMzguNzA5QzcyOS4wODgsMzM4LjU4OCA3MjkuMDMxLDMzOC4zMzUgNzI5LjEyNiwzMzguMjQxQzcyOS4zMDEsMzM4LjA2NyA3MjkuNTUxLDMzOC4yNDQgNzI5LjcyOCwzMzguMzAyQzczMC4wNTgsMzM4LjQwOSA3MzAuNDE4LDMzOC40NDUgNzMwLjc1NywzMzguNTA1QzczMS40NDksMzM4LjYyOSA3MzIuMTQ2LDMzOC43MjcgNzMyLjg0OCwzMzguNzg3Qzc0MC40NzgsMzM5LjQ0IDc0OS4zNjIsMzM1LjcyMyA3NTAuNTEsMzI3LjI3OUM3NTAuNTEyLDMyNy4yNjYgNzUwLjUwNiwzMjcuMjU2IDc1MC41MDgsMzI3LjI0NEM3NTAuNjAxLDMyNi4yNjQgNzQ5LjA5NiwzMjUuODkxIDc0OC45NTksMzI2Ljg5OUM3NDguNzg1LDMyOC4xNzMgNzQ4LjQyNywzMjkuMzAxIDc0Ny45NCwzMzAuMzE0Qzc0NC44NjYsMzM2LjcxMyA3MzYuMTYyLDMzOC4wOTQgNzI5LjUxNSwzMzYuNjAxQzcyOS4xNDMsMzM2LjUxNyA3MjguNzcsMzM2LjQyMSA3MjguMzk5LDMzNi4zMjVDNzI4LjM1LDMzNi4zMDQgNzI4LjI5OSwzMzYuMjg5IDcyOC4yNDYsMzM2LjI4N0M3MjcuNjM3LDMzNi41OTkgNzI3LjIyMywzMzcuNjcxIDcyNi44MjgsMzM4LjM3MUM3MjMuNDg5LDM0NC43NjYgNzIwLjE1MSwzNTEuMTYxIDcxNi44MTMsMzU3LjU1NkM3MTQuOTcyLDM2MS4wODUgNzEzLjEzLDM2NC42MTQgNzExLjI4OCwzNjguMTQzQzcwNi43NzgsMzc2Ljc4MyA3MDEuMzA4LDM4NS4zNjYgNzAyLjUwOCwzOTYuMTQ5QzcwMy4wNiw0MDEuMTE3IDcwNC4zNzUsNDA1Ljk2MyA3MDUuNzc1LDQxMC43NDhDNzA2LjQ3OSw0MTMuMTU0IDcwNy4yMTQsNDE1LjU1MSA3MDcuOTA3LDQxNy45NjFDNzA4LjM3LDQxOS41NjkgNzA4LjY4OSw0MjAuODggNzA5LjQ5NSw0MjIuMzMzQzcxMi42OTIsNDI4LjA5NyA3MTQuNDU2LDQzNC41MjUgNzE2LjEwMiw0NDAuODY2QzcxNy42NDEsNDQ2Ljc5MSA3MTkuMTA5LDQ1Mi42NDcgNzE3LjY4OSw0NTguNzg2QzcxNC40MjMsNDcyLjkwNCA3MDYuNDksNDg1LjU4MyA3MDEuOTY2LDQ5OS4yODZDNjk2LjQ0Myw1MTQuMzg5IDY4OS4zNTIsNTI4Ljg1OCA2ODIuMzgyLDU0My4xNjlDNjczLjE0NCw1NjIuMTM1IDYzOS45OCw2MjQuNDg1IDYxMS4wODcsNjc4LjE3NkM2MTIuMDM4LDY3OC4xNDYgNjEyLjk4OSw2NzguMTAzIDYxMy45NCw2NzguMDY4QzY0Ni40MzMsNjE3LjQ5NiA2ODQuOTM2LDU0NC4yNTYgNjk2LjMxLDUxOC41NDhDNjk4LjgxLDUxMi44OTcgNzAxLjIxNiw1MDcuMTI5IDcwMy40MTksNTAxLjI1QzcwMy41Myw1MDEuMTY1IDcwMy42MjgsNTAxLjA1MyA3MDMuNzAyLDUwMC45MDdDNzA3LjQyNCw0OTMuNTU5IDcxMC4xMDEsNDg1LjQ5NSA3MTMuMjE2LDQ3Ny44NjdDNzE1LjkxMiw0NzEuMjY1IDcxOS4yOTgsNDY0LjQ0OCA3MjAuMjkyLDQ1Ny4zMTZDNzIxLjI2OSw0NTAuMjk5IDcxOS40NDgsNDQ0LjA0NSA3MTcuMjk2LDQzNy40MTlDNzE0Ljk1Nyw0MzAuMjE5IDcxMi4yMzcsNDIzLjIwNCA3MDkuMzYzLDQxNi4yMTNaIiBzdHlsZT0iZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOmJsYWNrO3N0cm9rZS13aWR0aDo0LjM4cHg7Ii8+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwyMDEuNiwtMTE3LjMzMykiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgwLjU1ODcxNSwwLDAsMC41NTg3MTUsLTMuMTMyNCwzOTEuMTY0KSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNTYxLjk4MSw1MjguNzk1QzU2MS45ODEsNTI4Ljc5NSA1NjEuNTU1LDUyNy40NTggNTYwLjYxLDUyNi42MjEiIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOmJsYWNrO3N0cm9rZS13aWR0aDoxLjI1cHg7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLW1pdGVybGltaXQ6MS41OyIvPgogICAgICAgICAgICA8L2c+CiAgICAgICAgPC9nPgogICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEsMCwwLDEsMjAxLjYsLTExNy4zMzMpIj4KICAgICAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMC4xMjQ4MjIsMCwwLDAuMTI0ODIyLDIxNy4xNzUsNjQ1Ljc2MykiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTMzNy45ODQsNjgxLjk2QzMyOS4wOTMsNjgzLjA4MyAzMjAuMzQzLDY4MS41NjkgMzEyLjI4OCw2NzguMjMxQzMwNC43NDksNjc1LjEwOCAyOTYuMDE4LDY2OS45MDEgMjk1LjU5OSw2NjEuOTc2QzI5NS4yMDEsNjU0LjQ1NSAzMDMuMTk3LDY0OC4zMzcgMzA5LjkyNiw2NDQuODZDMzE3LjgzMiw2NDAuNzc1IDMyNy4wOTYsNjM5LjA5IDMzNi4yMjksNjM5LjE3MUMzMzcuMzE5LDYzOS4xODEgMzM3LjI3OSw2MzcuODEzIDMzNi4yMjksNjM3LjcyOUMzMjUuNzYzLDYzNi44OTUgMzE1LjQ0Miw2MzkuMjIzIDMwNi41MSw2NDMuOTg2QzI5OC45NzQsNjQ4LjAwNyAyOTIuMzc4LDY1NC44ODIgMjkyLjc1NSw2NjIuOTA1QzI5My4xMzYsNjcxLjAyIDMwMi4yNzgsNjc2LjU0MiAzMDkuNjk1LDY3OS45OThDMzE4LjUzNCw2ODQuMTE2IDMyOC44MjUsNjg1Ljk0OCAzMzguNzMyLDY4NC4zMTJDMzQwLjUzOSw2ODQuMDEzIDMzOS43MzcsNjgxLjczOCAzMzcuOTg0LDY4MS45NloiIHN0eWxlPSJmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6YmxhY2s7c3Ryb2tlLXdpZHRoOjQuMzhweDsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMTI0ODIyLDAsMCwwLjEyNDgyMiwyMTcuMTc1LDY0NS43NjMpIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik03MzEuMDQ4LDY5NS44NzFDNzYwLjgsNjkzLjcyIDc4OS43NDksNjg5Ljg1MiA4MDAuMDMsNjc2LjI0MUM4MDEuOTk0LDY3My42NDEgODAyLjc4MSw2NzAuODA4IDgwMi4zMDYsNjY4LjA0N0M4MDEuNzQyLDY2NC43ODEgNzk5LjQ2Niw2NjEuNzUgNzk1LjcyMiw2NTkuMjgzQzc5My40OCw2NTcuODA2IDc5MC42MTIsNjU2LjU0OCA3ODcuMjQ0LDY1NS41MzRDNzg5LjkzOCw2NTYuNDQyIDc5Mi40ODIsNjU3LjU4IDc5NC43MzcsNjU5LjAwMUM3OTguNDQ4LDY2MS4zMzggODAwLjYyOCw2NjQuMzkzIDgwMS4wNDEsNjY3LjgzNEM4MDEuNDgxLDY3MS41MDEgNzk5LjkxOCw2NzUuMzg0IDc5Ni42MzksNjc4Ljc2N0M3ODQuMzIzLDY5MS40NzIgNzU0LjU3LDY5My45MTEgNzMwLjY0MSw2OTUuODYzQzczMC43Niw2OTUuODc4IDczMC45MDEsNjk1Ljg4MyA3MzEuMDQ4LDY5NS44NzFaIiBzdHlsZT0iZmlsbC1ydWxlOm5vbnplcm87Ii8+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwyMDEuNiwtMTE3LjMzMykiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgwLjEyNDgyMiwwLDAsMC4xMjQ4MjIsMjE3LjE3NSw2NDUuNzYzKSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNODAxLjA0MSw2NjcuODM0QzgwMC42MjgsNjY0LjM5MyA3OTguNDQ4LDY2MS4zMzggNzk0LjczNyw2NTkuMDAxQzc5Mi40ODIsNjU3LjU4IDc4OS45MzgsNjU2LjQ0MiA3ODcuMjQ0LDY1NS41MzRDNzkwLjYxMiw2NTYuNTQ4IDc5My40OCw2NTcuODA2IDc5NS43MjIsNjU5LjI4M0M3OTkuNDY2LDY2MS43NSA4MDEuNzQyLDY2NC43ODEgODAyLjMwNiw2NjguMDQ3QzgwMi43ODEsNjcwLjgwOCA4MDEuOTk0LDY3My42NDEgODAwLjAzLDY3Ni4yNDFDNzg5Ljc0OSw2ODkuODUyIDc2MC44LDY5My43MiA3MzEuMDQ4LDY5NS44NzFDNzMwLjkwMSw2OTUuODgzIDczMC43Niw2OTUuODc4IDczMC42NDEsNjk1Ljg2M0M3NTQuNTcsNjkzLjkxMSA3ODQuMzIzLDY5MS40NzIgNzk2LjYzOSw2NzguNzY3Qzc5OS45MTgsNjc1LjM4NCA4MDEuNDgxLDY3MS41MDEgODAxLjA0MSw2NjcuODM0Wk04MDMuNzQyLDY2Ny43OTlDODAzLjExLDY2NC4xMjYgODAwLjYxMyw2NjAuNzYgNzk2LjUyMyw2NTguMDY1Qzc4Ny4wMzUsNjUxLjgxMiA3NzAuNDc5LDY1MS4xMzcgNzYzLjgwMyw2NTEuMTM3TDc2My40OTMsNjUxLjEzOEM3NjIuMzY0LDY1MS4xNDEgNzYxLjg0OCw2NTEuNzc2IDc2MS44NDYsNjUyLjM2NUM3NjEuODQ0LDY1Mi45NTcgNzYyLjM1Nyw2NTMuNTk3IDc2My40ODgsNjUzLjYwN0M3NzYuNTQ3LDY1My43MjkgNzg3LjM2OCw2NTYuMDgzIDc5My45Niw2NjAuMjM0Qzc5Ny4yODYsNjYyLjMzIDc5OS4yMzQsNjY1LjAxOCA3OTkuNTkzLDY2OC4wMDhDNzk5Ljk3OSw2NzEuMjMgNzk4LjU1OSw2NzQuNjkgNzk1LjU5Myw2NzcuNzUxQzc4My42NDYsNjkwLjA3NCA3NTQuMTU0LDY5Mi40ODEgNzMwLjQ1Nyw2OTQuNDE2TDczMC4yOTQsNjk0LjQyOUM3MjguNjM3LDY5NC41NjMgNzI4LjU5NCw2OTUuNTk3IDcyOC42MDIsNjk1LjgwM0M3MjguNjM4LDY5Ni42NzcgNzI5LjYxNyw2OTcuMzM1IDczMC44OCw2OTcuMzM1QzczMC45NjksNjk3LjMzNSA3MzEuMDYsNjk3LjMzMiA3MzEuMTUzLDY5Ny4zMjVDNzYxLjI0OCw2OTUuMTQ5IDc5MC41NjMsNjkxLjE5NSA4MDEuMTkzLDY3Ny4xMkM4MDMuNDA3LDY3NC4xODkgODA0LjI4OCw2NzAuOTY3IDgwMy43NDIsNjY3Ljc5OVoiIHN0eWxlPSJmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6YmxhY2s7c3Ryb2tlLXdpZHRoOjQuMzhweDsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMTI0ODIyLDAsMCwwLjEyNDgyMiwyMTcuMTc1LDY0NS43NjMpIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik01OTYuNzk4LDczMC4wOThDNTc5LjM0Myw3MzMuMzM3IDU2MS42MjksNzM0LjkzNyA1NDMuODc0LDczNC42OEM1MjUuNTc1LDczNC40MTQgNTA3LjYyNCw3MzEuNjg1IDQ4OS43MzgsNzI3Ljk5N0M0ODguNTU5LDcyNy43NTUgNDg4LjA2NCw3MjkuNDczIDQ4OS4yMzgsNzI5LjgxMUM1MjMuOTU1LDczOS44MTQgNTYyLjMwNiw3NDAuMTQyIDU5Ny41MzQsNzMyLjc2OEM1OTkuMjkxLDczMi4zOTkgNTk4LjUzNSw3MjkuNzc1IDU5Ni43OTgsNzMwLjA5OFoiIHN0eWxlPSJmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6YmxhY2s7c3Ryb2tlLXdpZHRoOjQuMzhweDsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxLDAsMCwxLDIwMS42LC0xMTcuMzMzKSI+CiAgICAgICAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMTI0ODIyLDAsMCwwLjEyNDgyMiwyMTcuMTc1LDY0NS43NjMpIj4KICAgICAgICAgICAgICAgIDxwYXRoIGQ9Ik0zODguNDg2LDYyNy44MDNDMzc4LjIwNCw2MjYuNzUxIDM2Ny42NjEsNjI4LjMyNSAzNTguMTM2LDYzMi4zNDRDMzU3LjEzNyw2MzIuNzY1IDM1Ny41MjgsNjM0LjQwNSAzNTguNTk2LDYzNC4wMTRDMzY4LjMxMSw2MzAuNDQ3IDM3OC4xNjcsNjI5LjEwMyAzODguNDg2LDYyOS45NDRDMzg5Ljg3Miw2MzAuMDU4IDM4OS44MzksNjI3Ljk0MSAzODguNDg2LDYyNy44MDNaIiBzdHlsZT0iZmlsbC1ydWxlOm5vbnplcm87c3Ryb2tlOmJsYWNrO3N0cm9rZS13aWR0aDo0LjM4cHg7Ii8+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICAgICAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMSwwLDAsMSwyMDEuNiwtMTE3LjMzMykiPgogICAgICAgICAgICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgwLjEyNDgyMiwwLDAsMC4xMjQ4MjIsMjE3LjE3NSw2NDUuNzYzKSI+CiAgICAgICAgICAgICAgICA8cGF0aCBkPSJNNjg2LjI1Nyw2NjAuMzU5QzY4Ni40OSw2NjEuMDI2IDY4Ni41MDksNjYxLjc5NCA2ODYuMjQ0LDY2Mi42NzRDNjg2LjM1Nyw2NjEuODMyIDY4Ni4zNTEsNjYxLjA2NSA2ODYuMjU3LDY2MC4zNTlaTTU4Ny40ODEsNjc4LjUxQzU4Mi44NDUsNjc4LjUxMSA1NzguMjA5LDY3OC40ODEgNTczLjU3NCw2NzguNDIyQzU3Mi45MzQsNjc4LjQxMyA1NzIuMjkzLDY3OC40MDIgNTcxLjY1Miw2NzguMzkzQzU2OS44NzcsNjc4LjM2NyA1NjguMTAxLDY3OC4zNDUgNTY2LjMyNiw2NzguMzEzQzU0Mi43NjIsNjc3Ljg4IDUxOS4xNzYsNjc3LjA3MyA0OTUuNjM1LDY3NS45MzNDNDc4LjcwMyw2NzUuMTEzIDQ2MS43ODcsNjczLjgwNyA0NDUuMDM3LDY3MS4yOTFDNDQ0LjQxNyw2NzEuMTk4IDQ0My43OTcsNjcxLjEwOSA0NDMuMTc4LDY3MS4wMTNDNDQwLjU3OSw2NzAuNjA4IDQzNy45ODUsNjcwLjE2OSA0MzUuMzk1LDY2OS43MDFDNDMyLjE2OCw2NjkuMTE5IDQyOC45NDcsNjY4LjQ5MiA0MjUuNzM2LDY2Ny44MDNDNDE5LjY0Niw2NjYuNDk2IDQxMy4wNzgsNjY1LjE4IDQwNi45MjQsNjYzLjAwN0M0MDYuMTUsNjYyLjczMyA0MDUuMzgzLDY2Mi40NDYgNDA0LjYyNCw2NjIuMTQ1QzQwMi40NzIsNjYxLjI4OCA0MDAuMzg1LDY2MC4zMTIgMzk4LjQwOCw2NTkuMTdDMzk3LjE1Myw2NTguMzU0IDM5Ni4wNTIsNjU3LjUzNSAzOTUuMjM1LDY1Ni43NzZDMzkzLjgzNiw2NTUuNDc4IDM5My4xNDYsNjUzLjUzOSAzOTMuMDQ4LDY1MS42OEMzOTIuODY3LDY0OC4yNzUgMzk2LjMyMSw2NDcuMDIzIDM5OC45NTEsNjQ2LjE1M0M0MDAuNjU0LDY0NS41OTEgMzk5Ljk2OCw2NDMuMDQxIDM5OC4yMDksNjQzLjQ2MkMzOTEuNDY2LDY0NS4wNzYgMzg3LjA4LDY0OS41NTEgMzg5Ljc5NSw2NTYuNzI0QzM5Mi41OTQsNjY0LjExNCA0MDEuMjI2LDY2NS40MzEgNDA4LjExNyw2NjUuOTYzQzQwOC4yNzcsNjY1Ljk3NiA0MDguNDM2LDY2NS45ODEgNDA4LjU5NSw2NjUuOTg3QzQxMC40OTIsNjY2LjU3OSA0MTIuMzk5LDY2Ny4xMTcgNDE0LjI4Myw2NjcuNjM2QzQyMS41MDEsNjY5LjYyMyA0MjguODE2LDY3MS4yMjQgNDM2LjE4LDY3Mi41NTZDNDQwLjE3OCw2NzMuMjc4IDQ0NC4xODksNjczLjkyNiA0NDguMjA5LDY3NC41MDZDNDcwLjgyMyw2NzcuNzcxIDQ5My42ODgsNjc4Ljc3MiA1MTYuNDk1LDY3OS42MTRDNTM4Ljk5Nyw2ODAuNDQ1IDU2MS41NTUsNjgxLjI5NyA1ODQuMDk3LDY4MS4zNjZDNjA5LjA5Nyw2ODEuNDQzIDYzNC4wNzcsNjgwLjU1NyA2NTguOTM4LDY3Ny41NjRDNjYyLjE3NCw2NzcuMTc2IDY2NS41NDUsNjc2LjcxMyA2NjguODY4LDY3Ni4wMDVDNjcwLjM3OSw2NzYuMDUyIDY3Mi4xNzUsNjc1LjM5NiA2NzMuNjQ3LDY3NC43NzFDNjc4Ljg1Miw2NzMuMTY3IDY4My42OTUsNjcwLjY5MyA2ODcuMzg1LDY2Ni41NzRDNjg5Ljk2LDY2My42OTkgNjkwLjA0Niw2NTkuOTIgNjg3LjYxOSw2NTcuMDEyQzY4NS4xNjksNjU0LjA3NSA2ODAuMjg5LDY1My40NDkgNjc2Ljc1Miw2NTMuMjA5QzY3Ni40MDcsNjUzLjE4NiA2NzYuMTI3LDY1My4yNjYgNjc1LjkwNyw2NTMuNDA5QzY3MS4wMTYsNjUyLjg2NiA2NjUuNTk3LDY1My40NjMgNjYyLjUxNSw2NTQuMDIxQzY2MC43NDYsNjU0LjM0MyA2NjEuMjM4LDY1Ny4wMjQgNjYyLjkyNiw2NTcuMDZDNjY2LjI5Niw2NTcuMTMgNjY5LjY5MSw2NTcuMjM5IDY3My4wMTIsNjU3Ljg0M0M2NzUuNjg1LDY1OC4zMjggNjc4Ljg5LDY1OC40OTEgNjgwLjk3MSw2NjAuNDQ0QzY4My4zNTQsNjYyLjY4MSA2NzguMjg5LDY2Ny43MDEgNjc2Ljg4Nyw2NjkuMDEzQzY3Ni40Niw2NjkuNDEyIDY3NC4xNyw2NzEuMDA5IDY3Mi4wMzIsNjcyLjE4N0M2NzEuNzU2LDY3Mi4yNjkgNjcxLjQ4Myw2NzIuMzQ5IDY3MS4yMjEsNjcyLjQyNEM2NjAuNTAxLDY3NS40OTUgNjQ4LjcwOCw2NzUuODk1IDYzNy42NDUsNjc2Ljc2QzYyOS43NTQsNjc3LjM3OCA2MjEuODUsNjc3Ljc5IDYxMy45NCw2NzguMDY4QzYxMi45ODksNjc4LjEwMyA2MTIuMDM4LDY3OC4xNDYgNjExLjA4Nyw2NzguMTc2QzYwMy4yMjIsNjc4LjQxOCA1OTUuMzUyLDY3OC41MSA1ODcuNDgxLDY3OC41MVoiIHN0eWxlPSJmaWxsLXJ1bGU6bm9uemVybztzdHJva2U6YmxhY2s7c3Ryb2tlLXdpZHRoOjQuMzhweDsiLz4KICAgICAgICAgICAgPC9nPgogICAgICAgIDwvZz4KICAgIDwvZz4KPC9zdmc+';
+
+    let qrGenerated = false;
+
+    function inizializzaQR() {
+      if (qrGenerated) return; // genera una volta sola
+      qrGenerated = true;
+
+      // Inserisce il logo SVG nel preview HTML (non canvas)
+      const logoWrap = document.getElementById('qr-preview-logo');
+      const img = document.createElement('img');
+      img.src = LOGO_DATA_URL;
+      img.style.cssText = 'width:100px;height:auto;';
+      img.alt = 'Bottlegram logo';
+      logoWrap.appendChild(img);
+
+      // Genera il QR code nel div #qrcode-canvas tramite qrcode.js
+      const qrDiv = document.getElementById('qrcode-canvas');
+      new QRCode(qrDiv, {
+        text:         QR_URL,
+        width:        180,
+        height:       180,
+        colorDark:    '#111111',
+        colorLight:   '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H  // alta correzione errori
+      });
+    }
+
+    /* ─────────────────────────────────────────────────────
+       QR DOWNLOAD: Disegna l'intero volantino su un canvas
+       ad alta risoluzione (1200×1600px) e scarica come PNG.
+    ───────────────────────────────────────────────────── */
+    async function downloadQR() {
+      // Attendi che il QR sia stato renderizzato
+      const qrImg = document.querySelector('#qrcode-canvas canvas') ||
+                    document.querySelector('#qrcode-canvas img');
+      if (!qrImg) { showToast('⚠️ QR non ancora pronto, riprova.'); return; }
+
+      const W = 1200, H = 1600;
+      const canvas = document.createElement('canvas');
+      canvas.width  = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d');
+
+      // Sfondo bianco
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, W, H);
+
+      // Bordo sottile
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(40, 40, W - 80, H - 80);
+
+      // Carica il logo SVG come immagine
+      const logoImg = new Image();
+      await new Promise((res, rej) => {
+        logoImg.onload = res;
+        logoImg.onerror = rej;
+        logoImg.src = LOGO_DATA_URL;
+      });
+
+      // Logo centrato in alto (300px di larghezza)
+      const logoW = 320;
+      const logoH = logoW * (logoImg.naturalHeight / logoImg.naturalWidth);
+      const logoX = (W - logoW) / 2;
+      ctx.drawImage(logoImg, logoX, 160, logoW, logoH);
+
+      // Scritta BOTTLEGRAM
+      ctx.fillStyle = '#111111';
+      ctx.font = 'bold 96px "Segoe UI", Arial, sans-serif';
+      ctx.letterSpacing = '12px';
+      ctx.textAlign = 'center';
+      ctx.fillText('BOTTLEGRAM', W / 2, logoH + 320);
+
+      // Separatore
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(120, logoH + 360);
+      ctx.lineTo(W - 120, logoH + 360);
+      ctx.stroke();
+
+      // QR code — scala a 560×560px sul canvas HD
+      const qrSize = 560;
+      const qrX = (W - qrSize) / 2;
+      const qrY = logoH + 400;
+      ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+      // Testo sotto il QR
+      ctx.fillStyle = '#444444';
+      ctx.font = '36px "Segoe UI", Arial, sans-serif';
+      ctx.letterSpacing = '1px';
+      ctx.fillText('Scan to leave or read messages', W / 2, qrY + qrSize + 80);
+      ctx.fillText('in this place', W / 2, qrY + qrSize + 128);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = 'bottlegram-qrcode.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('✅ Download avviato!');
+    }
+
+    /* ─────────────────────────────────────────────────────
+       UI: Chiude una modale rimuovendo la classe .active
+    ───────────────────────────────────────────────────── */
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    /* ─────────────────────────────────────────────────────
+       URL: Aggiorna i parametri lat/lon nell'URL corrente
+       senza ricaricare la pagina (replaceState).
+       Utile per condividere la propria posizione via link.
+    ───────────────────────────────────────────────────── */
+    function aggiornaURL(lat, lon) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('lat', lat);
+      url.searchParams.set('lon', lon);
+      window.history.replaceState({}, '', url);
+    }
+
+    /* ─────────────────────────────────────────────────────
+       URL: Legge lat/lon dai parametri dell'URL (se presenti).
+       Restituisce true se i parametri sono validi, false altrimenti.
+    ───────────────────────────────────────────────────── */
+    function leggiURLParams() {
+      const params = new URLSearchParams(window.location.search);
+      const lat    = parseFloat(params.get('lat'));
+      const lon    = parseFloat(params.get('lon'));
+      if (!isNaN(lat) && !isNaN(lon)) {
+        userLat = lat;
+        userLon = lon;
+        return true;
+      }
+      return false;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       GEO: Richiede la posizione GPS tramite navigator.geolocation.
+       - Aggiorna userLat, userLon, userCity
+       - Chiama Nominatim per il reverse geocoding (città/quartiere)
+       - Aggiorna l'UI con l'indirizzo rilevato
+    ───────────────────────────────────────────────────── */
+    function getGeo() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          document.getElementById('geo-status').textContent = '⚠️ Geo non supportata';
+          reject();
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            // Arrotonda a 6 decimali (~11 cm di precisione)
+            userLat = parseFloat(pos.coords.latitude.toFixed(6));
+            userLon = parseFloat(pos.coords.longitude.toFixed(6));
+            aggiornaURL(userLat, userLon);
+
+            // Reverse geocoding con OpenStreetMap Nominatim
+            try {
+              const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userLat}&lon=${userLon}&format=json`);
+              const data = await res.json();
+
+              const quartiere = data.address.suburb || data.address.neighbourhood || data.address.quarter || '';
+              const citta     = data.address.city   || data.address.town         || data.address.village || '';
+              userCity = quartiere ? `${quartiere}, ${citta}` : citta || 'Zona sconosciuta';
+
+              // Aggiorna le etichette di posizione nell'interfaccia
+              document.getElementById('geo-status').textContent          = `📍 ${userCity}`;
+              document.getElementById('msg-location-label').textContent  = `📍 ${userCity}`;
+              document.getElementById('header-raggio').textContent       = `📍 ${userCity}`;
+            } catch {
+              // Fallback se il reverse geocoding fallisce
+              userCity = 'Posizione rilevata';
+              document.getElementById('geo-status').textContent         = '📍 Posizione rilevata';
+              document.getElementById('msg-location-label').textContent = '📍 Posizione rilevata';
+            }
+
+            resolve();
+          },
+          () => {
+            // L'utente ha negato i permessi o la geolocalizzazione è fallita
+            document.getElementById('geo-status').textContent         = '⚠️ Posizione non disponibile';
+            document.getElementById('msg-location-label').textContent = 'Posizione non disponibile';
+            reject();
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+      });
+    }
+
+    /* ─────────────────────────────────────────────────────
+       UI: Aggiorna il toggle Pubblico/Privato e mostra
+       o nasconde il campo destinatario di conseguenza.
+    ───────────────────────────────────────────────────── */
+    function setVisibilita(v) {
+      visibilita = v;
+      document.getElementById('btn-pubblico').classList.toggle('active', v === 'pubblico');
+      document.getElementById('btn-privato').classList.toggle('active', v === 'privato');
+      document.getElementById('field-destinatario').classList.toggle('show', v === 'privato');
+    }
+
+    /* ─────────────────────────────────────────────────────
+       FIRESTORE: Invia un nuovo messaggio al database.
+       - Valida i campi obbligatori prima di procedere
+       - Salva nome, testo, coordinate, città, visibilità e timestamp
+       - Resetta il form e chiude la modale dopo l'invio
+    ───────────────────────────────────────────────────── */
+    async function inviaMessaggio() {
+      const nome        = document.getElementById('input-nome').value.trim()         || 'Anonimo';
+      const testo       = document.getElementById('input-messaggio').value.trim();
+      const destinatario = document.getElementById('input-destinatario').value.trim();
+
+      // Validazioni
+      if (!testo)                                       { showToast('⚠️ Scrivi un messaggio prima di inviare!');     return; }
+      if (visibilita === 'privato' && !destinatario)    { showToast('⚠️ Inserisci il nome del destinatario!');       return; }
+      if (!userLat)                                     { showToast('⚠️ Posizione non ancora rilevata, aspetta...'); return; }
+
+      try {
+        await addDoc(collection(db, 'messaggi'), {
+          nome,
+          testo,
+          lat:          userLat,
+          lon:          userLon,
+          citta:        userCity || 'Sconosciuta',
+          visibilita,
+          // Il destinatario viene salvato in minuscolo per confronti case-insensitive
+          destinatario: visibilita === 'privato' ? destinatario.toLowerCase() : '',
+          data:         serverTimestamp()
+        });
+
+        // Reset form
+        document.getElementById('input-nome').value         = '';
+        document.getElementById('input-messaggio').value    = '';
+        document.getElementById('input-destinatario').value = '';
+        setVisibilita('pubblico');
+
+        closeModal('overlay-messaggio');
+        showToast('✅ Messaggio inviato!');
+      } catch (e) {
+        showToast('❌ Errore invio. Riprova.');
+        console.error(e);
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────
+       INIT: Se l'URL contiene già lat/lon (es. link condiviso),
+       li usa direttamente senza richiedere la geolocalizzazione.
+    ───────────────────────────────────────────────────── */
+    const haURLParams = leggiURLParams();
+    if (haURLParams) {
+      document.getElementById('header-raggio').textContent      = '📍 Posizione dal link';
+      document.getElementById('msg-location-label').textContent = '📍 Posizione dal link';
+    }
+
+    /* ─────────────────────────────────────────────────────
+       FIRESTORE: Carica e renderizza i messaggi nella lista.
+       - Ordina per data decrescente
+       - Filtra i messaggi oltre il raggio impostato (RAGGIO)
+       - Distingue messaggi pubblici, privati indirizzati a me,
+         e privati indirizzati ad altri (oscurati)
+    ───────────────────────────────────────────────────── */
+    async function loadMessages() {
+      const container = document.getElementById('messages-list');
+      container.innerHTML = '<div class="loading">Caricamento...</div>';
+
+      if (!userLat) {
+        container.innerHTML = '<div class="no-messages">⏳ Posizione GPS non ancora rilevata.<br>Riprova tra un momento.</div>';
+        return;
+      }
+
+      try {
+        const q        = query(collection(db, 'messaggi'), orderBy('data', 'desc'));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          container.innerHTML = '<div class="no-messages">Nessun messaggio ancora.<br>Sii il primo!</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+        let count = 0;
+
+        snapshot.forEach(doc => {
+          const m = doc.data();
+
+          // Salta messaggi senza coordinate valide
+          if (!m.lat || !m.lon) return;
+
+          // Filtra per raggio massimo
+          const dist = distanzaMetri(userLat, userLon, m.lat, m.lon);
+          if (dist > RAGGIO) return;
+
+          count++;
+
+          const data      = m.data ? new Date(m.data.seconds * 1000).toLocaleString('it-IT') : '—';
+          const distLabel = formatDistanza(dist);
+
+          if (m.visibilita === 'pubblico') {
+            /* ── Messaggio pubblico: visibile a tutti ── */
+            container.innerHTML += `
+              <div class="message-card">
+                <div class="msg-header">
+                  <span class="msg-author">👤 ${m.nome}</span>
+                  <span class="msg-date">${data}</span>
+                </div>
+                <span class="msg-badge pub">PUBBLICO</span>
+                <div class="msg-distance">📍 ${distLabel} da te</div>
+                <div class="msg-location">${m.citta}</div>
+                <div class="msg-text troncato">${m.testo}</div>
+                <button class="btn-espandi" onclick="toggleTesto(this)" style="display:none">LEGGI DI PIÙ</button>
+              </div>`;
+          }
+
+          if (m.visibilita === 'privato') {
+            /* Controlla se il lettore è il destinatario del messaggio */
+            const eMioDest = nomeLettore && m.destinatario === nomeLettore;
+
+            if (eMioDest) {
+              /* ── Messaggio privato per questo lettore: mostra il "clicca per leggere" ── */
+              container.innerHTML += `
+                <div class="message-card privato" style="cursor: pointer" id="priv-${doc.id}">
+                  <div class="msg-header">
+                    <span class="msg-author privato">👤 ${m.nome}</span>
+                    <span class="msg-date">${data}</span>
+                  </div>
+                  <span class="msg-badge priv">PRIVATO — PER TE</span>
+                  <div class="msg-distance">📍 ${distLabel} da te</div>
+                  <div class="msg-location">${m.citta}</div>
+                  <div class="msg-locked">🔓 Clicca per leggere</div>
+                </div>`;
+
+              // Aggancia il click dopo che il DOM si è aggiornato
+              setTimeout(() => {
+                const el = document.getElementById(`priv-${doc.id}`);
+                if (el) {
+                  el.addEventListener('click', () => {
+                    // Popola la modale con i dati del messaggio privato
+                    document.getElementById('privato-mittente').textContent = m.nome;
+                    document.getElementById('privato-testo').textContent    = m.testo;
+                    document.getElementById('privato-data').textContent     = data;
+                    document.getElementById('privato-distanza').textContent = `📍 ${distLabel} da te`;
+                    document.getElementById('overlay-privato').classList.add('active');
+                  });
+                }
+              }, 100);
+            } else {
+              /* ── Messaggio privato per qualcun altro: oscurato ── */
+              container.innerHTML += `
+                <div class="message-card privato">
+                  <div class="msg-header">
+                    <span class="msg-author privato">— —</span>
+                    <span class="msg-date">${data}</span>
+                  </div>
+                  <span class="msg-badge priv">PRIVATO</span>
+                  <div class="msg-distance">📍 ${distLabel} da te</div>
+                  <div class="msg-location">${m.citta}</div>
+                  <div class="msg-locked">🔒 Questo messaggio è privato</div>
+                </div>`;
+            }
+          }
+        });
+
+        // Mostra il bottone "LEGGI DI PIÙ" solo per i messaggi effettivamente troncati
+        setTimeout(() => {
+          document.querySelectorAll('.msg-text.troncato').forEach(el => {
+            if (el.scrollHeight > el.clientHeight) {
+              const btn = el.nextElementSibling;
+              if (btn && btn.classList.contains('btn-espandi')) {
+                btn.style.display = 'inline-block';
+              }
+            }
+          });
+        }, 50);
+
+        // Nessun messaggio nel raggio
+        if (count === 0) {
+          container.innerHTML = `<div class="no-messages">Nessun messaggio in questa zona.<br>Sii il primo a lasciarne uno!</div>`;
+        }
+      } catch (e) {
+        container.innerHTML = '<div class="no-messages">Errore nel caricamento.</div>';
+        console.error(e);
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────
+       FIRESTORE: Invia un suggerimento / richiesta QR code
+       alla collezione "suggerimenti" del database.
+    ───────────────────────────────────────────────────── */
+    async function inviaSuggerimento() {
+      const nome  = document.getElementById('sug-nome').value.trim()   || 'Anonimo';
+      const email = document.getElementById('sug-email').value.trim();
+      const tipo  = document.getElementById('sug-tipo').value;
+      const testo = document.getElementById('sug-testo').value.trim();
+
+      // Validazioni
+      if (!testo) { showToast('⚠️ Scrivi un messaggio prima di inviare!'); return; }
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast('⚠️ Inserisci un\'email valida.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-invia-sug');
+      btn.disabled = true;
+      btn.textContent = 'INVIO...';
+
+      try {
+        await addDoc(collection(db, 'suggerimenti'), {
+          nome,
+          email:  email || '',
+          tipo,   // 'suggerimento' oppure 'qrcode'
+          testo,
+          data:   serverTimestamp()
+        });
+
+        // Reset form
+        document.getElementById('sug-nome').value  = '';
+        document.getElementById('sug-email').value = '';
+        document.getElementById('sug-tipo').value  = 'suggerimento';
+        document.getElementById('sug-testo').value = '';
+
+        // Mostra conferma inline
+        document.getElementById('sug-success').style.display = 'block';
+        setTimeout(() => {
+          document.getElementById('sug-success').style.display = 'none';
+        }, 5000);
+
+      } catch (e) {
+        showToast('❌ Errore invio. Riprova.');
+        console.error(e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'INVIA';
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────
+       EVENT LISTENERS – Navigazione e azioni utente
+    ───────────────────────────────────────────────────── */
+
+    // Home → apre modale "Chi sei?" prima di caricare i messaggi
+    document.getElementById('btn-leggi').addEventListener('click', () => {
+      document.getElementById('input-nome-lettore').value = '';
+      document.getElementById('overlay-lettore').classList.add('active');
+    });
+
+    // Home → apre modale di composizione e avvia il GPS
+    document.getElementById('btn-lascia').addEventListener('click', async () => {
+      document.getElementById('overlay-messaggio').classList.add('active');
+      document.getElementById('geo-status').textContent = '📍 Rilevamento posizione...';
+      await getGeo();
+    });
+
+    // Home → pagina QR code
+    document.getElementById('btn-qrcode').addEventListener('click', () => showPage('qrcode'));
+
+    // Home → pagina "Cos'è Bottlegram?"
+    document.getElementById('btn-chisiamo').addEventListener('click', () => showPage('chisiamo'));
+
+    // Logo header → torna sempre alla home
+    document.getElementById('header-logo').addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage('home');
+    });
+
+    // Bottoni "← Torna alla home"
+    document.getElementById('btn-back-msg').addEventListener('click', () => showPage('home'));
+    document.getElementById('btn-back-chi').addEventListener('click', () => showPage('home'));
+    document.getElementById('btn-back-qr').addEventListener('click',  () => showPage('home'));
+
+    // Download volantino QR code
+    document.getElementById('btn-download-qr').addEventListener('click', downloadQR);
+
+    // Invio messaggio
+    document.getElementById('btn-invia').addEventListener('click', inviaMessaggio);
+
+    // Conferma identità lettore → carica messaggi
+    document.getElementById('btn-conferma-lettore').addEventListener('click', async () => {
+      nomeLettore = document.getElementById('input-nome-lettore').value.trim().toLowerCase();
+      closeModal('overlay-lettore');
+      showPage('messaggi');
+      await getGeo();
+      loadMessages();
+    });
+
+    // Form suggerimenti inline
+    document.getElementById('btn-invia-sug').addEventListener('click', inviaSuggerimento);
+
+    // Toggle visibilità messaggio
+    document.getElementById('btn-pubblico').addEventListener('click', () => setVisibilita('pubblico'));
+    document.getElementById('btn-privato').addEventListener('click',  () => setVisibilita('privato'));
+
+    // Pulsanti di chiusura delle modali
+    document.getElementById('close-messaggio').addEventListener('click', () => closeModal('overlay-messaggio'));
+    document.getElementById('close-lettore').addEventListener('click',   () => closeModal('overlay-lettore'));
+    document.getElementById('close-privato').addEventListener('click',   () => closeModal('overlay-privato'));
+
+    // Chiusura modale cliccando fuori (sull'overlay semitrasparente)
+    document.getElementById('overlay-messaggio').addEventListener('click', function (e) { if (e.target === this) closeModal('overlay-messaggio'); });
+    document.getElementById('overlay-lettore').addEventListener('click',   function (e) { if (e.target === this) closeModal('overlay-lettore'); });
+    document.getElementById('overlay-privato').addEventListener('click',   function (e) { if (e.target === this) closeModal('overlay-privato'); });
+
+  </script>
+</body>
+</html>
