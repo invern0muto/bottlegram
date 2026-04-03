@@ -571,6 +571,74 @@
       font-size: 0.92rem;
     }
 
+    /* ─── Blocco newsletter/libro ────────────────────────── */
+    .book-note {
+      margin: 24px 0 8px;
+      padding: 18px 20px;
+      border: 1.5px solid var(--border);
+      background: var(--no-msg-bg);
+      border-radius: 0;
+    }
+
+    .book-note p {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .book-note .book-note-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .book-note input[type="email"] {
+      flex: 1;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text);
+      appearance: none;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .book-note input[type="email"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: var(--bg);
+    }
+
+    .book-note .btn-book {
+      padding: 11px 18px;
+      background: var(--text);
+      color: var(--bg);
+      border: none;
+      font-size: 0.82rem;
+      font-weight: 800;
+      font-family: inherit;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+
+    .book-note .btn-book:hover  { opacity: 0.8; }
+    .book-note .btn-book:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Messaggio conferma newsletter */
+    #newsletter-success {
+      display: none;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: var(--text-light);
+      border-left: 3px solid var(--accent);
+      padding-left: 10px;
+    }
+
     /* ─── Form suggerimenti inline ───────────────────────── */
     #form-suggerimento {
       margin-top: 28px;
@@ -941,6 +1009,16 @@
     <p data-i18n="page_chi_p3">I messaggi sono filtrati per distanza — vedi solo quelli vicini a te.</p>
     <p data-i18n="page_chi_p4">Il progetto è stato creato da <strong>Invernomuto</strong>, è totalmente gratuito e senza scopo di lucro.</p>
 
+    <!-- ─── Blocco newsletter/libro ─── -->
+    <div class="book-note">
+      <p data-i18n="book_note_text"><strong>Un giorno, forse, un libro verrà stampato con i migliori messaggi.</strong> Lascia la tua email: se quel giorno arriverà, sarai tra i primi a saperlo.</p>
+      <div class="book-note-row">
+        <input type="email" id="newsletter-email" placeholder="La tua email" data-i18n-ph="book_note_ph" />
+        <button class="btn-book" id="btn-newsletter" data-i18n="book_note_btn">AVVISAMI</button>
+      </div>
+      <div id="newsletter-success" data-i18n="book_note_success">✅ Perfetto! Ti avviseremo se il libro nascerà.</div>
+    </div>
+
     <button class="btn-primary" id="btn-qrcode" style="margin: 16px 0;" data-i18n="btn_qrcode">STAMPA IL TUO QR CODE</button>
 
     <!-- ─── Form inline: suggerimenti e richieste QR ─── -->
@@ -1110,6 +1188,14 @@
         page_chi_p2:              'Puoi lasciare messaggi pubblici visibili a tutti nella tua zona, o messaggi privati visibili solo al destinatario.',
         page_chi_p3:              'I messaggi sono filtrati per distanza — vedi solo quelli vicini a te.',
         page_chi_p4:              'Il progetto è stato creato da <strong>Invernomuto</strong>, è totalmente gratuito e senza scopo di lucro.',
+        /* --- Newsletter/libro --- */
+        book_note_text:           '<strong>Un giorno, forse, un libro verrà stampato con i migliori messaggi.</strong> Lascia la tua email: se quel giorno arriverà, sarai tra i primi a saperlo.',
+        book_note_ph:             'La tua email',
+        book_note_btn:            'AVVISAMI',
+        book_note_success:        '✅ Perfetto! Ti avviseremo se il libro nascerà.',
+        book_note_error_email:    'Inserisci un indirizzo email valido.',
+        book_note_invio:          'INVIO...',
+
         btn_qrcode:               'STAMPA IL TUO QR CODE',
         sug_title:                'Hai un suggerimento o vuoi un QR code?',
         sug_desc:                 'Segnalaci un luogo interessante dove posizionare un QR code, oppure lasciaci un suggerimento per migliorare Bottlegram.',
@@ -1223,6 +1309,14 @@
         page_chi_p2:              'You can leave public messages visible to everyone in your area, or private messages visible only to the recipient.',
         page_chi_p3:              'Messages are filtered by distance — you only see those near you.',
         page_chi_p4:              'The project was created by <strong>Invernomuto</strong>, it is completely free and non-profit.',
+        /* --- Newsletter/libro --- */
+        book_note_text:           '<strong>One day, perhaps, a book will be printed with the best messages.</strong> Leave your email: if that day comes, you will be among the first to know.',
+        book_note_ph:             'Your email',
+        book_note_btn:            'NOTIFY ME',
+        book_note_success:        '✅ Done! We will let you know if the book comes to life.',
+        book_note_error_email:    'Please enter a valid email address.',
+        book_note_invio:          'SENDING...',
+
         btn_qrcode:               'PRINT YOUR QR CODE',
         sug_title:                'Have a suggestion or want a QR code?',
         sug_desc:                 'Let us know an interesting place to put a QR code, or leave us a suggestion to improve Bottlegram.',
@@ -1935,6 +2029,48 @@
     }
 
     /* ─────────────────────────────────────────────────────
+       FIRESTORE: Iscrizione newsletter / lista attesa libro
+       Salva l'email nella collezione "newsletter" del database.
+    ───────────────────────────────────────────────────── */
+    async function iscriviNewsletter() {
+      const email = document.getElementById('newsletter-email').value.trim();
+
+      // Validazione email obbligatoria
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showToast(i18n[userLang].book_note_error_email);
+        return;
+      }
+
+      const btn = document.getElementById('btn-newsletter');
+      btn.disabled = true;
+      btn.textContent = i18n[userLang].book_note_invio;
+
+      try {
+        await addDoc(collection(db, 'newsletter'), {
+          email,
+          lang: userLang,       // 'it' oppure 'en'
+          data: serverTimestamp()
+        });
+
+        // Reset campo e mostra conferma
+        document.getElementById('newsletter-email').value = '';
+        document.getElementById('newsletter-success').style.display = 'block';
+
+        // Nascondi la conferma dopo 6 secondi
+        setTimeout(() => {
+          document.getElementById('newsletter-success').style.display = 'none';
+        }, 6000);
+
+      } catch (e) {
+        showToast(i18n[userLang].toast_errore_invio);
+        console.error('Errore newsletter:', e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = i18n[userLang].book_note_btn;
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────
        FIRESTORE: Invia un suggerimento / richiesta QR code
        alla collezione "suggerimenti" del database.
     ───────────────────────────────────────────────────── */
@@ -2036,6 +2172,14 @@
 
     // Form suggerimenti inline
     document.getElementById('btn-invia-sug').addEventListener('click', inviaSuggerimento);
+
+    // Newsletter / lista attesa libro
+    document.getElementById('btn-newsletter').addEventListener('click', iscriviNewsletter);
+
+    // Invio newsletter anche premendo Invio nel campo email
+    document.getElementById('newsletter-email').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') iscriviNewsletter();
+    });
 
     // Toggle visibilità messaggio
     document.getElementById('btn-pubblico').addEventListener('click', () => setVisibilita('pubblico'));
