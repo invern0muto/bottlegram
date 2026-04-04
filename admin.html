@@ -570,6 +570,7 @@
       <div class="nav-tab active" onclick="switchTab('stats')">📊 Statistiche</div>
       <div class="nav-tab" onclick="switchTab('messaggi')">💬 Messaggi</div>
       <div class="nav-tab" onclick="switchTab('suggerimenti')">📬 Suggerimenti</div>
+      <div class="nav-tab" onclick="switchTab('newsletter')">✉️ Newsletter</div>
     </nav>
 
     <!-- Content -->
@@ -598,6 +599,11 @@
             <div class="stat-label">Suggerimenti</div>
             <div class="stat-value" id="stat-sug">—</div>
             <div class="stat-sub">form inviati</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Newsletter</div>
+            <div class="stat-value" id="stat-news">—</div>
+            <div class="stat-sub">email iscritte</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Richieste QR</div>
@@ -688,6 +694,32 @@
 
       </section>
 
+      <!-- ── NEWSLETTER ──────────────────────────────────── -->
+      <section class="admin-section" id="section-newsletter">
+
+        <div class="section-header">
+          <h2>Newsletter — Lista Attesa Libro</h2>
+          <span class="count-badge" id="badge-news">—</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Lingua</th>
+                <th>Data iscrizione</th>
+                <th>Azioni</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-news">
+              <tr><td colspan="4" class="loading">Caricamento newsletter...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
     </main>
   </div>
 
@@ -705,6 +737,7 @@
     import { getFirestore, collection,
              getDocs, deleteDoc, doc,
              orderBy, query }             from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+    // Nota: addDoc e serverTimestamp non servono in admin (sola lettura/eliminazione)
 
     /* ─── Firebase config ──────────────────────────────────── */
     const app = initializeApp({
@@ -721,8 +754,9 @@
     const ADMIN_PASSWORD = 'bottlegram2024';
 
     /* ─── Dati in memoria ──────────────────────────────────── */
-    let allMsg = [];
-    let allSug = [];
+    let allMsg  = [];
+    let allSug  = [];
+    let allNews = [];   // iscritti newsletter
     let filtroMsg = 'tutti';
     let filtroSug = 'tutti';
 
@@ -751,7 +785,7 @@
 
     /* ─── Carica tutto ─────────────────────────────────────── */
     async function loadAll() {
-      await Promise.all([loadMessaggi(), loadSuggerimenti()]);
+      await Promise.all([loadMessaggi(), loadSuggerimenti(), loadNewsletter()]);
       aggiornaStats();
     }
 
@@ -764,6 +798,18 @@
       } catch(e) {
         document.getElementById('tbody-msg').innerHTML =
           `<tr><td colspan="6" class="loading" style="color:#c00">Errore caricamento: ${e.message}</td></tr>`;
+      }
+    }
+
+    /* ─── Carica newsletter ────────────────────────────────── */
+    async function loadNewsletter() {
+      try {
+        const snap = await getDocs(query(collection(db, 'newsletter'), orderBy('data', 'desc')));
+        allNews = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderNews();
+      } catch(e) {
+        document.getElementById('tbody-news').innerHTML =
+          `<tr><td colspan="4" class="loading" style="color:#c00">Errore caricamento: ${e.message}</td></tr>`;
       }
     }
 
@@ -857,6 +903,34 @@
       `).join('');
     }
 
+    /* ─── Render tabella newsletter ────────────────────────── */
+    function renderNews() {
+      const badge = document.getElementById('badge-news');
+      badge.textContent = allNews.length;
+
+      if (!allNews.length) {
+        document.getElementById('tbody-news').innerHTML =
+          '<tr><td colspan="4"><div class="empty-state">Nessuna email iscritta</div></td></tr>';
+        return;
+      }
+
+      document.getElementById('tbody-news').innerHTML = allNews.map(n => `
+        <tr>
+          <td>
+            <a href="mailto:${esc(n.email || '')}" style="color:var(--accent)">
+              ${esc(n.email || '—')}
+            </a>
+          </td>
+          <td><span class="badge" style="background:#e8f0fe;color:#1a73e8">${esc((n.lang || 'it').toUpperCase())}</span></td>
+          <td>${fmtData(n.data)}</td>
+          <td>
+            <button class="btn-action" onclick="viewNews('${n.id}')">LEGGI</button>
+            <button class="btn-delete" onclick="deleteNews('${n.id}')">ELIMINA</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
     /* ─── Statistiche ──────────────────────────────────────── */
     function aggiornaStats() {
       const pub  = allMsg.filter(m => m.visibilita === 'pubblico').length;
@@ -873,9 +947,10 @@
       document.getElementById('stat-sug').textContent    = sug;
       document.getElementById('stat-qr').textContent     = qr;
       document.getElementById('stat-luoghi').textContent = luoghi.length;
+      document.getElementById('stat-news').textContent   = allNews.length;
 
       document.getElementById('header-counts').textContent =
-        `${allMsg.length} msg · ${allSug.length} suggerimenti`;
+        `${allMsg.length} msg · ${allSug.length} sug · ${allNews.length} newsletter`;
 
       // Bar chart luoghi
       const conteggioLuoghi = {};
@@ -1056,6 +1131,49 @@
         await deleteDoc(doc(db, 'suggerimenti', id));
         allSug = allSug.filter(s => s.id !== id);
         renderSug();
+        aggiornaStats();
+      } catch(e) {
+        alert('Errore eliminazione: ' + e.message);
+      }
+    };
+
+    /* ─── View dettaglio newsletter ────────────────────────── */
+    window.viewNews = function(id) {
+      const n = allNews.find(x => x.id === id);
+      if (!n) return;
+      document.getElementById('detail-title').textContent = 'Iscritto Newsletter';
+      document.getElementById('detail-body').innerHTML = `
+        <div class="detail-row">
+          <div class="detail-label">Email</div>
+          <div class="detail-value">
+            <a href="mailto:${esc(n.email || '')}" style="color:var(--accent)">${esc(n.email || '—')}</a>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Lingua</div>
+          <div class="detail-value">
+            <span class="badge" style="background:#e8f0fe;color:#1a73e8">${esc((n.lang || 'it').toUpperCase())}</span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Data iscrizione</div>
+          <div class="detail-value">${fmtData(n.data)}</div>
+        </div>
+        <div style="margin-top:24px">
+          <button class="btn-delete" style="width:100%"
+            onclick="deleteNews('${n.id}'); closeDetail()">ELIMINA ISCRITTO</button>
+        </div>
+      `;
+      document.getElementById('overlay-detail').classList.add('open');
+    };
+
+    /* ─── Elimina iscritto newsletter ──────────────────────── */
+    window.deleteNews = async function(id) {
+      if (!confirm('Eliminare questo iscritto? L\'operazione è irreversibile.')) return;
+      try {
+        await deleteDoc(doc(db, 'newsletter', id));
+        allNews = allNews.filter(n => n.id !== id);
+        renderNews();
         aggiornaStats();
       } catch(e) {
         alert('Errore eliminazione: ' + e.message);
